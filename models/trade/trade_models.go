@@ -70,10 +70,10 @@ type (
 		TradeID  string              `json:"tradeId"`
 		ClOrdID  string              `json:"clOrdId"`
 		BillID   string              `json:"billId"`
+		FeeCcy   string              `json:"feeCcy"`
 		Tag      okex.JSONFloat64    `json:"tag"`
 		FillPx   okex.JSONFloat64    `json:"fillPx"`
 		FillSz   okex.JSONFloat64    `json:"fillSz"`
-		FeeCcy   okex.JSONFloat64    `json:"feeCcy"`
 		Fee      okex.JSONFloat64    `json:"fee"`
 		InstType okex.InstrumentType `json:"instType"`
 		Side     okex.OrderSide      `json:"side"`
