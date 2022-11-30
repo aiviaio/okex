@@ -6,9 +6,6 @@ okex
 [![GitHub license](https://img.shields.io/github/license/aiviaio/okex.svg)](https://github.com/aiviaio/okex/blob/main/LICENSE)
 [![GitHub release](https://img.shields.io/github/release/aiviaio/okex.svg)](https://GitHub.com/aiviaio/okex/releases/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square)](http://makeapullrequest.com)
-[![CI](https://github.com/aiviaio/okex/actions/workflows/main.yml/badge.svg)](https://github.com/aiviaio/okex/actions/workflows/main.yml)
-[![CodeQL](https://github.com/aiviaio/okex/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/aiviaio/okex/actions/workflows/codeql-analysis.yml)
-[![AutoRelease](https://github.com/aiviaio/okex/actions/workflows/release.yml/badge.svg)](https://github.com/aiviaio/okex/actions/workflows/release.yml)
 
 *NOTICE:*
 > PACKAGE IS CURRENTLY UNDER HEAVY DEVELOPMENT AND THERE IS NO GUARANTY FOR STABILITY UNTIL V1 RELEASE.
@@ -22,7 +19,7 @@ Installation
 -----------------
 
 ```bash
-go get github.com/aiviaio/okex@v1.0.0
+go get github.com/aiviaio/okex@v1.0.5
 ```
 
 Usage

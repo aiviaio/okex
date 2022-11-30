@@ -70,9 +70,14 @@ const (
 	DemoPublicWsURL  = BaseURL("wss://wspap.okex.com:8443/ws/v5/public?brokerId=9999")
 	DemoPrivateWsURL = BaseURL("wss://wspap.okex.com:8443/ws/v5/private?brokerId=9999")
 
+	OmegaRestURL      = BaseURL("https://omegaexchange.io")
+	OmegaPublicWsURL  = BaseURL("wss://omegaexchange.io:8443/ws/v5/public")
+	OmegaPrivateWsURL = BaseURL("wss://omegaexchange.io:8443/ws/v5/private")
+
 	NormalServer = Destination(iota + 1)
 	AwsServer    = NormalServer + 1
 	DemoServer   = AwsServer + 1
+	OmegaServer  = DemoServer + 1
 
 	SpotInstrument    = InstrumentType("SPOT")
 	MarginInstrument  = InstrumentType("MARGIN")
