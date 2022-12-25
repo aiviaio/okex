@@ -32,18 +32,21 @@ type ClientWs struct {
 	sendChan            map[bool]chan []byte
 	url                 map[bool]okex.BaseURL
 	conn                map[bool]*websocket.Conn
+	isConnect           map[bool]bool //是否在线
 	apiKey              string
 	secretKey           []byte
 	passphrase          string
 	lastTransmit        map[bool]*time.Time
 	mu                  map[bool]*sync.Mutex
 	rmu                 map[bool]*sync.Mutex
+	cmu                 map[bool]*sync.Mutex //重连锁
 	AuthRequested       *time.Time
 	Authorized          bool
 	Private             *Private
 	Public              *Public
 	Trade               *Trade
 	ctx                 context.Context
+	subscriptionRecord  map[bool][][]map[string]string
 }
 
 const (
@@ -63,7 +66,7 @@ func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url ma
 		ctx:                 ctx,
 		Cancel:              cancel,
 		url:                 url,
-		sendChan:            map[bool]chan []byte{true: make(chan []byte), false: make(chan []byte)},
+		sendChan:            map[bool]chan []byte{true: make(chan []byte, 15), false: make(chan []byte, 15)},
 		DoneChan:            make(chan interface{}),
 		StructuredEventChan: make(chan interface{}),
 		RawEventChan:        make(chan *events.Basic),
@@ -71,6 +74,9 @@ func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url ma
 		lastTransmit:        make(map[bool]*time.Time),
 		mu:                  map[bool]*sync.Mutex{true: {}, false: {}},
 		rmu:                 map[bool]*sync.Mutex{true: {}, false: {}},
+		cmu:                 map[bool]*sync.Mutex{true: {}, false: {}},
+		subscriptionRecord:  map[bool][][]map[string]string{},
+		isConnect:           map[bool]bool{true: false, false: false},
 	}
 	c.Private = NewPrivate(c)
 	c.Public = NewPublic(c)
@@ -82,7 +88,7 @@ func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url ma
 //
 // https://www.okex.com/docs-v5/en/#websocket-api-connect
 func (c *ClientWs) Connect(p bool) error {
-	if c.conn[p] != nil {
+	if c.conn[p] != nil && c.isConnect[p] != false {
 		return nil
 	}
 	err := c.dial(p)
@@ -110,6 +116,7 @@ func (c *ClientWs) Connect(p bool) error {
 func (c *ClientWs) Login() error {
 	c.mu[true].Lock()
 	if c.Authorized {
+		c.mu[true].Unlock()
 		return nil
 	}
 	if c.AuthRequested != nil && time.Since(*c.AuthRequested).Seconds() < 30 {
@@ -150,6 +157,7 @@ func (c *ClientWs) Subscribe(p bool, ch []okex.ChannelName, args map[string]stri
 			tmpArgs[i][k] = v
 		}
 	}
+	c.subscriptionRecord[p] = append(c.subscriptionRecord[p], tmpArgs)
 	return c.Send(p, okex.SubscribeOperation, tmpArgs)
 }
 
@@ -237,19 +245,23 @@ func (c *ClientWs) dial(p bool) error {
 	}()
 	conn, res, err := websocket.DefaultDialer.Dial(string(c.url[p]), nil)
 	if err != nil {
-		return fmt.Errorf("error %d: %w", res.StatusCode, err)
+		c.isConnect[p] = false
+		return err
 	}
+	c.isConnect[p] = true
 	defer res.Body.Close()
 	go func() {
-		err := c.receiver(p)
-		if err != nil {
-			fmt.Printf("receiver error: %v\n", err)
+		err2 := c.receiver(p)
+		if err2 != nil {
+			println(err2.Error())
 		}
+		c.isConnect[p] = false
+		go c.reconnection(p)
 	}()
 	go func() {
-		err := c.sender(p)
-		if err != nil {
-			fmt.Printf("sender error: %v\n", err)
+		err2 := c.sender(p)
+		if err2 != nil {
+			println(err2.Error())
 		}
 	}()
 	c.conn[p] = conn
@@ -283,7 +295,7 @@ func (c *ClientWs) sender(p bool) error {
 				return err
 			}
 		case <-ticker.C:
-			if c.conn[p] != nil && (c.lastTransmit[p] == nil || (c.lastTransmit[p] != nil && time.Since(*c.lastTransmit[p]) > PingPeriod)) {
+			if c.conn[p] != nil && c.isConnect[p] != false && (c.lastTransmit[p] == nil || (c.lastTransmit[p] != nil && time.Since(*c.lastTransmit[p]) > PingPeriod)) {
 				go func() {
 					c.sendChan[p] <- []byte("ping")
 				}()
@@ -318,7 +330,7 @@ func (c *ClientWs) receiver(p bool) error {
 			c.mu[p].Lock()
 			c.lastTransmit[p] = &now
 			c.mu[p].Unlock()
-			if mt == websocket.TextMessage && string(data) != "pong" {
+			if mt == websocket.TextMessage && string(data) != "pong" && c.isConnect[p] == true {
 				e := &events.Basic{}
 				if err := json.Unmarshal(data, &e); err != nil {
 					return err
@@ -344,6 +356,22 @@ func (c *ClientWs) handleCancel(msg string) error {
 		c.DoneChan <- msg
 	}()
 	return fmt.Errorf("operation cancelled: %s", msg)
+}
+func (c *ClientWs) reconnection(p bool) {
+	if c.isConnect[p] == true {
+		return
+	}
+	if c.cmu[p].TryLock() == true {
+		c.Connect(p)
+		c.cmu[p].Unlock()
+		if c.AuthRequested != nil { //检测之前是否授权
+			c.Authorized = false
+			c.AuthRequested = nil
+		}
+		for _, m := range c.subscriptionRecord[p] { //重新登陆开始的订阅
+			c.Send(p, okex.SubscribeOperation, m)
+		}
+	}
 }
 
 // TODO: break each case into a separate function
