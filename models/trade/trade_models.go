@@ -6,11 +6,11 @@ import (
 
 type (
 	PlaceOrder struct {
-		ClOrdID string           `json:"clOrdId"`
-		Tag     string           `json:"tag"`
-		SMsg    string           `json:"sMsg"`
-		SCode   okex.JSONInt64   `json:"sCode"`
-		OrdID   okex.JSONFloat64 `json:"ordId"`
+		OrdID   string         `json:"ordId"`
+		ClOrdID string         `json:"clOrdId"`
+		Tag     string         `json:"tag"`
+		SMsg    string         `json:"sMsg"`
+		SCode   okex.JSONInt64 `json:"sCode"`
 	}
 	CancelOrder struct {
 		OrdID   string           `json:"ordId"`
