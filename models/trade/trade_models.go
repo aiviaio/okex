@@ -40,7 +40,7 @@ type (
 		FeeCcy          string              `json:"feeCcy"`
 		RebateCcy       string              `json:"rebateCcy"`
 		QuickMgnType    string              `json:"quickMgnType"`
-		ReduceOnly      bool                `json:"reduceOnly,omitempty"`
+		ReduceOnly      string              `json:"reduceOnly,omitempty"`
 		Px              okex.JSONFloat64    `json:"px"`
 		Sz              okex.JSONInt64      `json:"sz"`
 		Pnl             okex.JSONFloat64    `json:"pnl"`
