@@ -6,19 +6,24 @@ import (
 
 type (
 	PlaceOrder struct {
-		ID         string            `json:"-"`
-		InstID     string            `json:"instId"`
-		Ccy        string            `json:"ccy,omitempty"`
-		ClOrdID    string            `json:"clOrdId,omitempty"`
-		Tag        string            `json:"tag,omitempty"`
-		ReduceOnly bool              `json:"reduceOnly,omitempty"`
-		Sz         int64             `json:"sz,string"`
-		Px         float64           `json:"px,omitempty,string"`
-		TdMode     okex.TradeMode    `json:"tdMode"`
-		Side       okex.OrderSide    `json:"side"`
-		PosSide    okex.PositionSide `json:"posSide,omitempty"`
-		OrdType    okex.OrderType    `json:"ordType"`
-		TgtCcy     okex.QuantityType `json:"tgtCcy,omitempty"`
+		ID           string            `json:"-"`
+		InstID       string            `json:"instId"`
+		Ccy          string            `json:"ccy,omitempty"`
+		ClOrdID      string            `json:"clOrdId,omitempty"`
+		Tag          string            `json:"tag,omitempty"`
+		QuickMgnType string            `json:"quickMgnType,omitempty"`
+		ReduceOnly   bool              `json:"reduceOnly,omitempty"`
+		Sz           int64             `json:"sz,string"`
+		Px           float64           `json:"px,omitempty,string"`
+		TdMode       okex.TradeMode    `json:"tdMode"`
+		Side         okex.OrderSide    `json:"side"`
+		PosSide      okex.PositionSide `json:"posSide,omitempty"`
+		OrdType      okex.OrderType    `json:"ordType"`
+		TgtCcy       okex.QuantityType `json:"tgtCcy,omitempty"`
+		TpTriggerPx  okex.JSONFloat64  `json:"tpTriggerPx"`
+		TpOrdPx      okex.JSONFloat64  `json:"tpOrdPx"`
+		SlTriggerPx  okex.JSONFloat64  `json:"slTriggerPx"`
+		SlOrdPx      okex.JSONFloat64  `json:"slOrdPx"`
 	}
 	CancelOrder struct {
 		ID      string `json:"-"`
