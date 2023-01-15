@@ -95,6 +95,11 @@ type (
 		TriggerPx float64 `json:"triggerPx,string,omitempty"`
 		OrdPx     float64 `json:"ordPx,string,omitempty"`
 	}
+	TrailingStopOrder struct {
+		CallbackRatio  string `json:"callbackRatio,string,omitempty"`
+		CallbackSpread string `json:"callbackSpread,string,omitempty"`
+		ActivePx       string `json:"activePx,string,omitempty"`
+	}
 	IcebergOrder struct {
 		PxVar    float64 `json:"pxVar,string,omitempty"`
 		PxSpread float64 `json:"pxSpread,string,omitempty"`
