@@ -6,26 +6,20 @@ import (
 
 type (
 	PlaceOrder struct {
-		ID              string            `json:"-"`
-		InstID          string            `json:"instId"`
-		Ccy             string            `json:"ccy,omitempty"`
-		ClOrdID         string            `json:"clOrdId,omitempty"`
-		Tag             string            `json:"tag,omitempty"`
-		QuickMgnType    string            `json:"quickMgnType,omitempty"`
-		ReduceOnly      bool              `json:"reduceOnly,omitempty"`
-		Sz              int64             `json:"sz,string"`
-		Px              float64           `json:"px,omitempty,string"`
-		TdMode          okex.TradeMode    `json:"tdMode"`
-		Side            okex.OrderSide    `json:"side"`
-		PosSide         okex.PositionSide `json:"posSide,omitempty"`
-		OrdType         okex.OrderType    `json:"ordType"`
-		TgtCcy          okex.QuantityType `json:"tgtCcy,omitempty"`
-		TpTriggerPx     okex.JSONFloat64  `json:"tpTriggerPx"`
-		TpTriggerPxType string            `json:"tpTriggerPxType,omitempty"`
-		TpOrdPx         okex.JSONFloat64  `json:"tpOrdPx"`
-		SlTriggerPx     okex.JSONFloat64  `json:"slTriggerPx"`
-		SlOrdPx         okex.JSONFloat64  `json:"slOrdPx"`
-		SlTriggerPxType string            `json:"slTriggerPxType,omitempty"`
+		ID           string            `json:"-"`
+		InstID       string            `json:"instId"`
+		Ccy          string            `json:"ccy,omitempty"`
+		ClOrdID      string            `json:"clOrdId,omitempty"`
+		Tag          string            `json:"tag,omitempty"`
+		QuickMgnType string            `json:"quickMgnType,omitempty"`
+		ReduceOnly   bool              `json:"reduceOnly,omitempty"`
+		Sz           int64             `json:"sz,string"`
+		Px           float64           `json:"px,omitempty,string"`
+		TdMode       okex.TradeMode    `json:"tdMode"`
+		Side         okex.OrderSide    `json:"side"`
+		PosSide      okex.PositionSide `json:"posSide,omitempty"`
+		OrdType      okex.OrderType    `json:"ordType"`
+		TgtCcy       okex.QuantityType `json:"tgtCcy,omitempty"`
 	}
 	CancelOrder struct {
 		ID      string `json:"-"`
@@ -74,25 +68,28 @@ type (
 		InstType okex.InstrumentType `json:"instType,omitempty"`
 	}
 	PlaceAlgoOrder struct {
-		InstID     string             `json:"instId"`
-		TdMode     okex.TradeMode     `json:"tdMode"`
-		Ccy        string             `json:"ccy,omitempty"`
-		Side       okex.OrderSide     `json:"side"`
-		PosSide    okex.PositionSide  `json:"posSide,omitempty"`
-		OrdType    okex.AlgoOrderType `json:"ordType"`
-		Sz         int64              `json:"sz,string"`
-		ReduceOnly bool               `json:"reduceOnly,omitempty"`
-		TgtCcy     okex.QuantityType  `json:"tgtCcy,omitempty"`
+		InstID       string             `json:"instId"`
+		TdMode       okex.TradeMode     `json:"tdMode"`
+		Ccy          string             `json:"ccy,omitempty"`
+		Side         okex.OrderSide     `json:"side"`
+		PosSide      okex.PositionSide  `json:"posSide,omitempty"`
+		OrdType      okex.AlgoOrderType `json:"ordType"`
+		Sz           int64              `json:"sz,string"`
+		ReduceOnly   bool               `json:"reduceOnly,omitempty"`
+		QuickMgnType string             `json:"quickMgnType,omitempty"`
+		TgtCcy       okex.QuantityType  `json:"tgtCcy,omitempty"`
 		StopOrder
 		TriggerOrder
 		IcebergOrder
 		TWAPOrder
 	}
 	StopOrder struct {
-		TpTriggerPx float64 `json:"tpTriggerPx,string,omitempty"`
-		TpOrdPx     float64 `json:"tpOrdPx,string,omitempty"`
-		SlTriggerPx float64 `json:"slTriggerPx,string,omitempty"`
-		SlOrdPx     float64 `json:"slOrdPx,string,omitempty"`
+		TpTriggerPx     float64 `json:"tpTriggerPx,string,omitempty"`
+		TpOrdPx         float64 `json:"tpOrdPx,string,omitempty"`
+		TpTriggerPxType string  `json:"tpTriggerPxType,omitempty"`
+		SlTriggerPx     float64 `json:"slTriggerPx,string,omitempty"`
+		SlOrdPx         float64 `json:"slOrdPx,string,omitempty"`
+		SlTriggerPxType string  `json:"slTriggerPxType,omitempty"`
 	}
 	TriggerOrder struct {
 		TriggerPx float64 `json:"triggerPx,string,omitempty"`
@@ -115,11 +112,13 @@ type (
 	AlgoOrderList struct {
 		InstType okex.InstrumentType `json:"instType,omitempty"`
 		Uly      string              `json:"uly,omitempty"`
+		AlgoID   string              `json:"algoId,omitempty"`
 		InstID   string              `json:"instId,omitempty"`
+		ClOrdID  string              `json:"clOrdId,omitempty"`
 		After    float64             `json:"after,omitempty,string"`
 		Before   float64             `json:"before,omitempty,string"`
 		Limit    float64             `json:"limit,omitempty,string"`
 		OrdType  okex.AlgoOrderType  `json:"ordType,omitempty"`
-		State    okex.OrderState     `json:"state,omitempty"`
+		State    okex.OrderState     `json:"algoIdstate,omitempty"`
 	}
 )
