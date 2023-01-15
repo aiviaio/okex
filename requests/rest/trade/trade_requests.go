@@ -112,7 +112,7 @@ type (
 	}
 	CancelAlgoOrder struct {
 		InstID string `json:"instId"`
-		AlgoID string `json:"AlgoId"`
+		AlgoID string `json:"algoId"`
 	}
 	AlgoOrderList struct {
 		InstType okex.InstrumentType `json:"instType,omitempty"`
