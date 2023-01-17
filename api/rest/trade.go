@@ -25,15 +25,9 @@ func NewTrade(c *ClientRest) *Trade {
 // You can place an order only if you have sufficient funds.
 //
 // https://www.okex.com/docs-v5/en/#rest-api-trade-get-positions
-func (c *Trade) PlaceOrder(req []requests.PlaceOrder) (response responses.PlaceOrder, err error) {
+func (c *Trade) PlaceOrder(req requests.PlaceOrder) (response responses.PlaceOrder, err error) {
 	p := "/api/v5/trade/order"
-	var tmp interface{}
-	tmp = req[0]
-	if len(req) > 1 {
-		tmp = req
-		p = "/api/v5/trade/batch-orders"
-	}
-	m := okex.S2M(tmp)
+	m := okex.S2M(req)
 	res, err := c.client.Do(http.MethodPost, p, true, m)
 	if err != nil {
 		return
@@ -51,8 +45,10 @@ func (c *Trade) PlaceOrder(req []requests.PlaceOrder) (response responses.PlaceO
 // https://www.okex.com/docs-v5/en/#rest-api-trade-place-multiple-orders
 func (c *Trade) PlaceMultipleOrders(req []requests.PlaceOrder) (response responses.PlaceOrder, err error) {
 	p := "/api/v5/trade/batch-order"
-	m := okex.S2M(req)
-	res, err := c.client.Do(http.MethodPost, p, true, m)
+	var m interface{}
+	m = req
+	res, err := c.client.DoBatch(p, m)
+
 	if err != nil {
 		return
 	}
@@ -72,15 +68,18 @@ func (c *Trade) PlaceMultipleOrders(req []requests.PlaceOrder) (response respons
 //
 // https://www.okex.com/docs-v5/en/#rest-api-trade-cancel-multiple-orders
 func (c *Trade) CancelOrder(req []requests.CancelOrder) (response responses.PlaceOrder, err error) {
-	p := "/api/v5/trade/cancel-order"
-	var tmp interface{}
-	tmp = req[0]
+	var p string
+	var res *http.Response
 	if len(req) > 1 {
-		tmp = req
 		p = "/api/v5/trade/cancel-batch-orders"
+		var m interface{}
+		m = req
+		res, err = c.client.DoBatch(p, m)
+	} else {
+		p = "/api/v5/trade/cancel-order"
+		m := okex.S2M(req[0])
+		res, err = c.client.Do(http.MethodPost, p, true, m)
 	}
-	m := okex.S2M(tmp)
-	res, err := c.client.Do(http.MethodPost, p, true, m)
 	if err != nil {
 		return
 	}
@@ -99,15 +98,19 @@ func (c *Trade) CancelOrder(req []requests.CancelOrder) (response responses.Plac
 //
 // https://www.okex.com/docs-v5/en/#rest-api-trade-amend-multiple-orders
 func (c *Trade) AmendOrder(req []requests.OrderList) (response responses.AmendOrder, err error) {
-	p := "/api/v5/trade/amend-order"
-	var tmp interface{}
-	tmp = req[0]
+	var p string
+	var res *http.Response
 	if len(req) > 1 {
-		tmp = req
 		p = "/api/v5/trade/amend-batch-orders"
+		var m interface{}
+		m = req
+		res, err = c.client.DoBatch(p, m)
+	} else {
+		p = "/api/v5/trade/amend-order"
+		m := okex.S2M(req[0])
+		res, err = c.client.Do(http.MethodPost, p, true, m)
 	}
-	m := okex.S2M(tmp)
-	res, err := c.client.Do(http.MethodPost, p, true, m)
+
 	if err != nil {
 		return
 	}
@@ -240,9 +243,10 @@ func (c *Trade) PlaceAlgoOrder(req requests.PlaceAlgoOrder) (response responses.
 //
 // https://www.okex.com/docs-v5/en/#rest-api-trade-cancel-algo-order
 func (c *Trade) CancelAlgoOrder(req requests.CancelAlgoOrder) (response responses.CancelAlgoOrder, err error) {
+	var m interface{}
+	m = req
 	p := "/api/v5/trade/cancel-algos"
-	m := okex.S2M(req)
-	res, err := c.client.Do(http.MethodPost, p, true, m)
+	res, err := c.client.DoBatch(p, m)
 	if err != nil {
 		return
 	}
@@ -260,9 +264,10 @@ func (c *Trade) CancelAlgoOrder(req requests.CancelAlgoOrder) (response response
 //
 // https://www.okex.com/docs-v5/en/#rest-api-trade-cancel-advance-algo-order
 func (c *Trade) CancelAdvanceAlgoOrder(req requests.CancelAlgoOrder) (response responses.CancelAlgoOrder, err error) {
+	var m interface{}
+	m = req
 	p := "/api/v5/trade/cancel-advance-algos"
-	m := okex.S2M(req)
-	res, err := c.client.Do(http.MethodPost, p, true, m)
+	res, err := c.client.DoBatch(p, m)
 	if err != nil {
 		return
 	}

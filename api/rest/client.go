@@ -109,6 +109,47 @@ func (c *ClientRest) Do(method, path string, private bool, params ...map[string]
 	return c.Client.Do(r)
 }
 
+// DoBatch the private post request to the server with parameters of tyoe array
+func (c *ClientRest) DoBatch(path string, params interface{}) (*http.Response, error) {
+	method := "POST"
+	u := fmt.Sprintf("%s%s", c.baseURL, path)
+	var (
+		r    *http.Request
+		err  error
+		j    []byte
+		body string
+	)
+
+	j, err = json.Marshal(params)
+	if err != nil {
+		return nil, err
+	}
+	body = string(j)
+	if body == "{}" || body == "[]" {
+		body = ""
+	}
+	r, err = http.NewRequest(method, u, bytes.NewBuffer(j))
+	if err != nil {
+		return nil, err
+	}
+	r.Header.Add("Content-Type", "application/json")
+
+	if err != nil {
+		return nil, err
+	}
+
+	timestamp, sign := c.sign(method, path, body)
+	r.Header.Add("OK-ACCESS-KEY", c.apiKey)
+	r.Header.Add("OK-ACCESS-PASSPHRASE", c.passphrase)
+	r.Header.Add("OK-ACCESS-SIGN", sign)
+	r.Header.Add("OK-ACCESS-TIMESTAMP", timestamp)
+
+	if c.destination == okex.DemoServer {
+		r.Header.Add("x-simulated-trading", "1")
+	}
+	return c.Client.Do(r)
+}
+
 // Status
 // Get event status of system upgrade
 //
