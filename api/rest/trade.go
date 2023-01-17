@@ -242,7 +242,7 @@ func (c *Trade) PlaceAlgoOrder(req requests.PlaceAlgoOrder) (response responses.
 // Cancel unfilled algo orders(trigger order, oco order, conditional order). A maximum of 10 orders can be canceled at a time. Request parameters should be passed in the form of an array.
 //
 // https://www.okex.com/docs-v5/en/#rest-api-trade-cancel-algo-order
-func (c *Trade) CancelAlgoOrder(req requests.CancelAlgoOrder) (response responses.CancelAlgoOrder, err error) {
+func (c *Trade) CancelAlgoOrder(req []requests.CancelAlgoOrder) (response responses.CancelAlgoOrder, err error) {
 	var m interface{}
 	m = req
 	p := "/api/v5/trade/cancel-algos"
@@ -263,7 +263,7 @@ func (c *Trade) CancelAlgoOrder(req requests.CancelAlgoOrder) (response response
 // # Only released on demo trading
 //
 // https://www.okex.com/docs-v5/en/#rest-api-trade-cancel-advance-algo-order
-func (c *Trade) CancelAdvanceAlgoOrder(req requests.CancelAlgoOrder) (response responses.CancelAlgoOrder, err error) {
+func (c *Trade) CancelAdvanceAlgoOrder(req []requests.CancelAlgoOrder) (response responses.CancelAlgoOrder, err error) {
 	var m interface{}
 	m = req
 	p := "/api/v5/trade/cancel-advance-algos"
