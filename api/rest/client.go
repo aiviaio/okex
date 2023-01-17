@@ -109,7 +109,7 @@ func (c *ClientRest) Do(method, path string, private bool, params ...map[string]
 	return c.Client.Do(r)
 }
 
-// DoBatch the private post request to the server with parameters of tyoe array
+// DoBatch the private post request to the server with parameters of type slice
 func (c *ClientRest) DoBatch(path string, params interface{}) (*http.Response, error) {
 	method := "POST"
 	u := fmt.Sprintf("%s%s", c.baseURL, path)
