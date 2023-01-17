@@ -82,6 +82,7 @@ type (
 		TriggerOrder
 		IcebergOrder
 		TWAPOrder
+		TrailingStopOrder
 	}
 	StopOrder struct {
 		TpTriggerPx     float64 `json:"tpTriggerPx,string,omitempty"`
