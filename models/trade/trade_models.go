@@ -125,9 +125,9 @@ type (
 		TpTriggerPxType string              `json:"tpTriggerPxType"`
 		SlTriggerPxType string              `json:"slTriggerPxType"`
 		TriggerPx       okex.JSONFloat64    `json:"triggerPx"`
-		CallbackRatio   okex.JSONFloat64    `json:"callbackRatio,string"`
-		CallbackSpread  okex.JSONFloat64    `json:"callbackSpread,string"`
-		ActivePx        okex.JSONFloat64    `json:"activePx,string"`
+		CallbackRatio   okex.JSONFloat64    `json:"callbackRatio"`
+		CallbackSpread  okex.JSONFloat64    `json:"callbackSpread"`
+		ActivePx        okex.JSONFloat64    `json:"activePx"`
 		OrdPx           okex.JSONFloat64    `json:"ordPx"`
 		Fee             okex.JSONFloat64    `json:"fee"`
 		Rebate          okex.JSONFloat64    `json:"rebate"`
