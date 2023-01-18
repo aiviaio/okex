@@ -12,7 +12,7 @@ type (
 		ClOrdID    string            `json:"clOrdId,omitempty"`
 		Tag        string            `json:"tag,omitempty"`
 		ReduceOnly bool              `json:"reduceOnly,omitempty"`
-		Sz         int64             `json:"sz,string"`
+		Sz         float64           `json:"sz,string"`
 		Px         float64           `json:"px,omitempty,string"`
 		TdMode     okex.TradeMode    `json:"tdMode"`
 		Side       okex.OrderSide    `json:"side"`
@@ -32,7 +32,7 @@ type (
 		OrdID     string  `json:"ordId,omitempty"`
 		ClOrdID   string  `json:"clOrdId,omitempty"`
 		ReqID     string  `json:"reqId,omitempty"`
-		NewSz     int64   `json:"newSz,omitempty,string"`
+		NewSz     float64 `json:"newSz,omitempty,string"`
 		NewPx     float64 `json:"newPx,omitempty,string"`
 		CxlOnFail bool    `json:"cxlOnFail,omitempty"`
 	}
@@ -73,7 +73,7 @@ type (
 		Side       okex.OrderSide     `json:"side"`
 		PosSide    okex.PositionSide  `json:"posSide,omitempty"`
 		OrdType    okex.AlgoOrderType `json:"ordType"`
-		Sz         int64              `json:"sz,string"`
+		Sz         float64            `json:"sz,string"`
 		ReduceOnly bool               `json:"reduceOnly,omitempty"`
 		TgtCcy     okex.QuantityType  `json:"tgtCcy,omitempty"`
 		StopOrder
@@ -94,7 +94,7 @@ type (
 	IcebergOrder struct {
 		PxVar    float64 `json:"pxVar,string,omitempty"`
 		PxSpread float64 `json:"pxSpread,string,omitempty"`
-		SzLimit  int64   `json:"szLimit,string"`
+		SzLimit  float64 `json:"szLimit,string"`
 		PxLimit  float64 `json:"pxLimit,string"`
 	}
 	TWAPOrder struct {
