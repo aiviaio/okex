@@ -237,6 +237,19 @@ func (c *Private) Process(data []byte, e *events.Basic) bool {
 				c.StructuredEventChan <- e
 			}()
 			return true
+		case "algo-advance":
+			e := private.AlgoOrder{}
+			err := json.Unmarshal(data, &e)
+			if err != nil {
+				return false
+			}
+			go func() {
+				if c.aaoCh != nil {
+					c.aaoCh <- &e
+				}
+				c.StructuredEventChan <- e
+			}()
+			return true
 		}
 	}
 	return false
