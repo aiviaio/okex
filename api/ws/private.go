@@ -19,6 +19,7 @@ type Private struct {
 	bnpCh chan *private.BalanceAndPosition
 	oCh   chan *private.Order
 	aoCh  chan *private.AlgoOrder
+	aaoCh chan *private.AlgoOrder
 }
 
 // NewPrivate returns a pointer to a fresh Private
@@ -139,6 +140,29 @@ func (c *Private) UAlgoOrder(req requests.AlgoOrder, rCh ...bool) error {
 		c.aoCh = nil
 	}
 	return c.Unsubscribe(true, []okex.ChannelName{"orders-algo"}, m)
+}
+
+// Algo Order
+// Retrieve position information. Initial snapshot will be pushed according to subscription granularity. Data will be pushed when triggered by events such as placing/canceling advanced algo order, and will also be pushed in regular interval according to subscription granularity.
+//
+// https://www.okx.com/docs-v5/en/#websocket-api-private-channel-algo-orders-channel
+func (c *Private) AdvancedAlgoOrder(req requests.AlgoOrder, ch ...chan *private.AlgoOrder) error {
+	m := okex.S2M(req)
+	if len(ch) > 0 {
+		c.aaoCh = ch[0]
+	}
+	return c.Subscribe(true, []okex.ChannelName{"algo-advance"}, m)
+}
+
+// UOrder
+//
+// https://www.okex.com/docs-v5/en/#websocket-api-private-channel-order-channel
+func (c *Private) UAdvancedAlgoOrder(req requests.AlgoOrder, rCh ...bool) error {
+	m := okex.S2M(req)
+	if len(rCh) > 0 && rCh[0] {
+		c.aaoCh = nil
+	}
+	return c.Unsubscribe(true, []okex.ChannelName{"algo-advance"}, m)
 }
 
 func (c *Private) Process(data []byte, e *events.Basic) bool {
