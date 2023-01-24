@@ -97,7 +97,7 @@ func (c *Trade) CancelOrder(req []requests.CancelOrder) (response responses.Canc
 // Amend incomplete orders in batches. Maximum 20 orders can be amended at a time. Request parameters should be passed in the form of an array.
 //
 // https://www.okex.com/docs-v5/en/#rest-api-trade-amend-multiple-orders
-func (c *Trade) AmendOrder(req []requests.OrderList) (response responses.AmendOrder, err error) {
+func (c *Trade) AmendOrder(req []requests.AmendOrder) (response responses.AmendOrder, err error) {
 	var p string
 	var res *http.Response
 	if len(req) > 1 {
@@ -110,7 +110,6 @@ func (c *Trade) AmendOrder(req []requests.OrderList) (response responses.AmendOr
 		m := okex.S2M(req[0])
 		res, err = c.client.Do(http.MethodPost, p, true, m)
 	}
-
 	if err != nil {
 		return
 	}
