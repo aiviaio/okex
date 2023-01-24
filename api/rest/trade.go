@@ -67,7 +67,7 @@ func (c *Trade) PlaceMultipleOrders(req []requests.PlaceOrder) (response respons
 // Cancel incomplete orders in batches. Maximum 20 orders can be canceled at a time. Request parameters should be passed in the form of an array.
 //
 // https://www.okex.com/docs-v5/en/#rest-api-trade-cancel-multiple-orders
-func (c *Trade) CancelOrder(req []requests.CancelOrder) (response responses.PlaceOrder, err error) {
+func (c *Trade) CancelOrder(req []requests.CancelOrder) (response responses.CancelOrder, err error) {
 	var p string
 	var res *http.Response
 	if len(req) > 1 {
