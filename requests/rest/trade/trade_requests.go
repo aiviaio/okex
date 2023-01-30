@@ -70,6 +70,8 @@ type (
 	PlaceAlgoOrder struct {
 		InstID       string             `json:"instId"`
 		TdMode       okex.TradeMode     `json:"tdMode"`
+		ClOrdID      string             `json:"clOrdId,omitempty"`
+		Tag          string             `json:"tag,omitempty"`
 		Ccy          string             `json:"ccy,omitempty"`
 		Side         okex.OrderSide     `json:"side"`
 		PosSide      okex.PositionSide  `json:"posSide,omitempty"`
