@@ -71,8 +71,8 @@ const (
 	DemoPrivateWsURL = BaseURL("wss://wspap.okex.com:8443/ws/v5/private?brokerId=9999")
 
 	OmegaRestURL      = BaseURL("https://www.omegaexchange.io")
-	OmegaPublicWsURL  = BaseURL("wss://www.omegaexchange.io:8443/ws/v5/public")
-	OmegaPrivateWsURL = BaseURL("wss://www.omegaexchange.io:8443/ws/v5/private")
+	OmegaPublicWsURL  = BaseURL("wss://ws.okex.com:8443/ws/v5/public?brokerId=200")
+	OmegaPrivateWsURL = BaseURL("wss://ws.okex.com:8443/ws/v5/private?brokerId=200")
 
 	NormalServer = Destination(iota + 1)
 	AwsServer    = NormalServer + 1
