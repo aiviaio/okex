@@ -27,4 +27,44 @@ type (
 		responses.Basic
 		Transfers []*models.Transfer `json:"data,omitempty"`
 	}
+	CreateSubAccount struct {
+		responses.Basic
+		CreateSubAccount []*models.CreateSubAccount `json:"data,omitempty"`
+	}
+	DeleteSubAccount struct {
+		responses.Basic
+		DeleteSubAccount []*models.DeleteSubAccount `json:"data,omitempty"`
+	}
+	CreatAPIKeySubAccount struct {
+		responses.Basic
+		CreatAPIKeySubAccount []*models.CreatAPIKeySubAccount `json:"data,omitempty"`
+	}
+	UpdateAPIKEySubAccount struct {
+		responses.Basic
+		UpdateSubAccount []*models.UpdateAPIKEySubAccount `json:"data,omitempty"`
+	}
+	DeleteAPIKeySubAccount struct {
+		responses.Basic
+		DeleteAPIKeySubAccount []*models.DeleteAPIKeySubAccount `json:"data,omitempty"`
+	}
+	SetLevelSubAccount struct {
+		responses.Basic
+		SetLevelSubAccount []*models.SetLevelSubAccount `json:"data,omitempty"`
+	}
+	SetFeeRateSubAccount struct {
+		responses.Basic
+		SetFeeRateSubAccount []*models.SetFeeRateSubAccount `json:"data,omitempty"`
+	}
+	CreateDepositAddress struct {
+		responses.Basic
+		CreateDepositAddress []*models.CreateDepositAddress `json:"data,omitempty"`
+	}
+	UpdateDepositAddress struct {
+		responses.Basic
+		UpdateDepositAddress []*models.UpdateDepositAddress `json:"data,omitempty"`
+	}
+	GetDepositAddress struct {
+		responses.Basic
+		GetDepositAddress []*models.GetDepositAddress `json:"data,omitempty"`
+	}
 )
