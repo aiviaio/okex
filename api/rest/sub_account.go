@@ -164,3 +164,181 @@ func (c *SubAccount) ManageTransfers(req requests.ManageTransfers) (response res
 	err = d.Decode(&response)
 	return
 }
+
+// CreateSubAccount
+// applies to master accounts only
+//
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-create-sub-account
+func (c *SubAccount) CreateSubAccount(req requests.CreateSubAccount) (response responses.CreateSubAccount, err error) {
+	p := "/api/v5/broker/nd/create-subaccount"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodPost, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
+// DeleteSubAccount
+// applies to master accounts only
+//
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-delete-sub-account
+func (c *SubAccount) DeleteSubAccount(req requests.DeleteSubAccount) (response responses.DeleteSubAccount, err error) {
+	p := "/api/v5/broker/nd/delete-subaccount"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodPost, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
+// CreateAPIKeySubAccount
+// applies to master accounts only
+//
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-create-an-api-key-for-a-sub-account
+func (c *SubAccount) CreateAPIKeySubAccount(req requests.CreatAPIKeySubAccount) (
+	response responses.CreatAPIKeySubAccount, err error) {
+	p := "/api/v5/broker/nd/subaccount/apikey"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodPost, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
+// UpdateAPIKeySubAccount
+// applies to master accounts only
+//
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-reset-the-api-key-of-a-sub-account
+func (c *SubAccount) UpdateAPIKeySubAccount(req requests.UpdateAPIKEySubAccount) (
+	response responses.UpdateAPIKEySubAccount, err error) {
+	p := "/api/v5/broker/nd/subaccount/modify-apikey"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodPost, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
+// DeleteAPIKEySubAccount
+// applies to master accounts only
+//
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-delete-the-api-key-of-sub-accounts
+func (c *SubAccount) DeleteAPIKEySubAccount(req requests.DeleteAPIKeySubAccount) (
+	response responses.DeleteAPIKeySubAccount, err error) {
+	p := "/api/v5/broker/nd/subaccount/delete-apikey"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodPost, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
+// SetLevelSubAccount
+// applies to master accounts only
+//
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-set-the-account-level-of-the-sub-account
+func (c *SubAccount) SetLevelSubAccount(req requests.SetLevelSubAccount) (response responses.SetLevelSubAccount,
+	err error) {
+	p := "/api/v5/broker/nd/set-subaccount-level"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodPost, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
+// SetFeeRateSubAccount
+// applies to master accounts only
+//
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-set-trading-fee-rate-for-the-sub-account
+func (c *SubAccount) SetFeeRateSubAccount(req requests.SetFeeRateSubAccount) (response responses.SetFeeRateSubAccount,
+	err error) {
+	p := "/api/v5/broker/nd/set-subaccount-fee-rate"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodPost, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
+// CreateDepositAddressSubAccount
+// applies to master accounts only
+//
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-create-deposit-address-for-sub-account
+func (c *SubAccount) CreateDepositAddressSubAccount(req requests.CreateDepositAddress) (
+	response responses.CreateDepositAddress, err error) {
+	p := "/api/v5/asset/broker/nd/subaccount-deposit-address"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodPost, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
+// UpdateDepositAddressSubAccount
+// applies to master accounts only
+//
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-modify-sub-account-deposit-address
+func (c *SubAccount) UpdateDepositAddressSubAccount(req requests.UpdateDepositAddress) (
+	response responses.UpdateDepositAddress, err error) {
+	p := "/api/v5/asset/broker/nd/modify-subaccount-deposit-address"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodPost, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
+// GetDepositAddressSubAccount
+// applies to master accounts only
+//
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-get-sub-account-deposit-address
+func (c *SubAccount) GetDepositAddressSubAccount(req requests.GetDepositAddress) (response responses.GetDepositAddress,
+	err error) {
+	p := "/api/v5/asset/broker/nd/subaccount-deposit-address"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodGet, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
