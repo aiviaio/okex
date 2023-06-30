@@ -47,6 +47,10 @@ type (
 		responses.Basic
 		DeleteAPIKeySubAccount []*models.DeleteAPIKeySubAccount `json:"data,omitempty"`
 	}
+	GetFeeRatesSubAccount struct {
+		responses.Basic
+		GetFeeRatesSubAccount []*models.GetFeeRatesSubAccount `json:"data,omitempty"`
+	}
 	SetLevelSubAccount struct {
 		responses.Basic
 		SetLevelSubAccount []*models.SetLevelSubAccount `json:"data,omitempty"`
