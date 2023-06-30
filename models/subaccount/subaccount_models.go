@@ -67,6 +67,20 @@ type (
 	SetLevelSubAccount struct {
 		AcctLv string `json:"acctLv"` // Account level 1: Simple 2: Single-currency margin 3: Multi-currency margin 4：Portfolio margin
 	}
+	GetFeeRatesSubAccount struct {
+		Level     string        `json:"level"`
+		Taker     string        `json:"taker"`
+		Maker     string        `json:"maker"`
+		TakerU    string        `json:"takerU"`
+		MakerU    string        `json:"makerU"`
+		Delivery  string        `json:"delivery"`
+		Exercise  string        `json:"exercise"`
+		InstType  string        `json:"instType"`
+		TakerUSDC string        `json:"takerUSDC"`
+		MakerUSDC string        `json:"makerUSDC"`
+		TS        okex.JSONTime `json:"ts,omitempty"`
+		Category  string        `json:"category"`
+	}
 	SetFeeRateSubAccount struct {
 		SubAcct string `json:"subAcct,omitempty"`
 		EffDate string `json:"effDate,omitempty"`

@@ -271,6 +271,23 @@ func (c *SubAccount) SetLevelSubAccount(req requests.SetLevelSubAccount) (respon
 	return
 }
 
+// GetFeeRatesSubAccount
+//
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-get-sub-account-deposit-address
+func (c *SubAccount) GetFeeRatesSubAccount(req requests.GetFeeRatesSubAccount) (response responses.GetFeeRatesSubAccount,
+	err error) {
+	p := "/api/v5/account/trade-fee"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodGet, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
 // SetFeeRateSubAccount
 // applies to master accounts only
 //

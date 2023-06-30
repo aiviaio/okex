@@ -75,6 +75,12 @@ type (
 		SubAcct string `json:"subAcct"`
 		AcctLv  string `json:"acctLv"` //Account level 1: Simple 2: Single-currency margin 3: Multi-currency margin 4：Portfolio margin
 	}
+	GetFeeRatesSubAccount struct {
+		InstType   string `json:"instType"`             // SPOT MARGIN SWAP FUTURES OPTION
+		InstID     string `json:"instId,omitempty"`     // Instrument ID, e.g. BTC-USDT Applicable to SPOT/MARGIN
+		Uly        string `json:"uly,omitempty"`        // Underlying, e.g. BTC-USD Applicable to FUTURES/SWAP/OPTION
+		InstFamily string `json:"instFamily,omitempty"` // Instrument family, e.g. BTC-USDApplicable to FUTURES/SWAP/OPTION
+	}
 	SetFeeRateSubAccount struct {
 		SubAcct  string `json:"subAcct,omitempty"`
 		InstType string `json:"instType,omitempty"`
