@@ -25,7 +25,7 @@ type (
 		Vol24h    okex.JSONFloat64    `json:"vol24h"`
 		SodUtc0   okex.JSONFloat64    `json:"sodUtc0"`
 		SodUtc8   okex.JSONFloat64    `json:"sodUtc8"`
-		InstType  okex.InstrumentType `json:"instType,string"`
+		InstType  okex.InstrumentType `json:"instType"`
 		TS        okex.JSONTime       `json:"ts"`
 	}
 	IndexTicker struct {
@@ -76,7 +76,7 @@ type (
 		TradeID okex.JSONFloat64 `json:"tradeId"`
 		Px      okex.JSONFloat64 `json:"px"`
 		Sz      okex.JSONFloat64 `json:"sz"`
-		Side    okex.TradeSide   `json:"side,string"`
+		Side    okex.TradeSide   `json:"side"`
 		TS      okex.JSONTime    `json:"ts"`
 	}
 	TotalVolume24H struct {
