@@ -192,7 +192,9 @@ func (c *ClientWs) Send(p bool, op okex.Operation, args []map[string]string, ext
 	if err != nil {
 		return err
 	}
+
 	c.sendChan[p] <- j
+
 	return nil
 }
 
@@ -255,8 +257,10 @@ func (c *ClientWs) sender(p bool) error {
 	ticker := time.NewTicker(time.Millisecond * 300)
 	defer ticker.Stop()
 	for {
+		dataChan := c.sendChan[p]
+
 		select {
-		case data := <-c.sendChan[p]:
+		case data := <-dataChan:
 			c.mu[p].RLock()
 			err := c.conn[p].SetWriteDeadline(time.Now().Add(writeWait))
 			if err != nil {
@@ -272,18 +276,22 @@ func (c *ClientWs) sender(p bool) error {
 				c.mu[p].RUnlock()
 				return err
 			}
+
 			now := time.Now()
 			c.lastTransmit[p] = &now
 			c.mu[p].RUnlock()
+
 			if err := w.Close(); err != nil {
 				return err
 			}
 		case <-ticker.C:
+			c.mu[p].RLock()
 			if c.conn[p] != nil && (c.lastTransmit[p] == nil || (c.lastTransmit[p] != nil && time.Since(*c.lastTransmit[p]) > PingPeriod)) {
 				go func() {
 					c.sendChan[p] <- []byte("ping")
 				}()
 			}
+			c.mu[p].RUnlock()
 		case <-c.ctx.Done():
 			return c.handleCancel("sender")
 		}
@@ -310,10 +318,12 @@ func (c *ClientWs) receiver(p bool) error {
 				return err
 			}
 			c.mu[p].RUnlock()
+
 			now := time.Now()
 			c.mu[p].Lock()
 			c.lastTransmit[p] = &now
 			c.mu[p].Unlock()
+
 			if mt == websocket.TextMessage && string(data) != "pong" {
 				e := &events.Basic{}
 				if err := json.Unmarshal(data, &e); err != nil {
