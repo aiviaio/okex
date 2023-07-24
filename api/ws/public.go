@@ -3,12 +3,11 @@ package ws
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
-
 	"github.com/aiviaio/okex"
 	"github.com/aiviaio/okex/events"
 	"github.com/aiviaio/okex/events/public"
 	requests "github.com/aiviaio/okex/requests/ws/public"
+	"strings"
 )
 
 // Public
@@ -270,7 +269,7 @@ func (c *Public) UOrderBook(req requests.OrderBook, rCh ...bool) error {
 	if len(rCh) > 0 && rCh[0] {
 		c.obCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{}, m)
+	return c.Unsubscribe(false, []okex.ChannelName{okex.ChannelName(req.Channel)}, m)
 }
 
 // OPTIONSummary
