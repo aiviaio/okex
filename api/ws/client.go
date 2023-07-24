@@ -257,7 +257,9 @@ func (c *ClientWs) sender(p bool) error {
 	ticker := time.NewTicker(time.Millisecond * 300)
 	defer ticker.Stop()
 	for {
+		c.mu[p].RLock()
 		dataChan := c.sendChan[p]
+		c.mu[p].RUnlock()
 
 		select {
 		case data := <-dataChan:
