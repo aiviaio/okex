@@ -6,20 +6,26 @@ import (
 
 type (
 	PlaceOrder struct {
-		ID           string            `json:"-"`
-		InstID       string            `json:"instId"`
-		Ccy          string            `json:"ccy,omitempty"`
-		ClOrdID      string            `json:"clOrdId,omitempty"`
-		Tag          string            `json:"tag,omitempty"`
-		QuickMgnType string            `json:"quickMgnType,omitempty"`
-		ReduceOnly   bool              `json:"reduceOnly,omitempty"`
-		Sz           int64             `json:"sz,string"`
-		Px           float64           `json:"px,omitempty,string"`
-		TdMode       okex.TradeMode    `json:"tdMode"`
-		Side         okex.OrderSide    `json:"side"`
-		PosSide      okex.PositionSide `json:"posSide,omitempty"`
-		OrdType      okex.OrderType    `json:"ordType"`
-		TgtCcy       okex.QuantityType `json:"tgtCcy,omitempty"`
+		ID              string            `json:"-"`
+		InstID          string            `json:"instId"`
+		Ccy             string            `json:"ccy,omitempty"`
+		ClOrdID         string            `json:"clOrdId,omitempty"`
+		Tag             string            `json:"tag,omitempty"`
+		QuickMgnType    string            `json:"quickMgnType,omitempty"`
+		ReduceOnly      bool              `json:"reduceOnly,omitempty"`
+		Sz              float64           `json:"sz,string"`
+		Px              float64           `json:"px,omitempty,string"`
+		TdMode          okex.TradeMode    `json:"tdMode"`
+		Side            okex.OrderSide    `json:"side"`
+		PosSide         okex.PositionSide `json:"posSide,omitempty"`
+		OrdType         okex.OrderType    `json:"ordType"`
+		TgtCcy          okex.QuantityType `json:"tgtCcy,omitempty"`
+		TpTriggerPx     float64           `json:"tpTriggerPx,string,omitempty"`
+		TpOrdPx         float64           `json:"tpOrdPx,string,omitempty"`
+		TpTriggerPxType string            `json:"tpTriggerPxType,omitempty"`
+		SlTriggerPx     float64           `json:"slTriggerPx,string,omitempty"`
+		SlOrdPx         float64           `json:"slOrdPx,string,omitempty"`
+		SlTriggerPxType string            `json:"slTriggerPxType,omitempty"`
 	}
 	CancelOrder struct {
 		ID      string `json:"-"`
@@ -33,7 +39,7 @@ type (
 		OrdID     string  `json:"ordId,omitempty"`
 		ClOrdID   string  `json:"clOrdId,omitempty"`
 		ReqID     string  `json:"reqId,omitempty"`
-		NewSz     int64   `json:"newSz,omitempty,string"`
+		NewSz     float64 `json:"newSz,omitempty,string"`
 		NewPx     float64 `json:"newPx,omitempty,string"`
 		CxlOnFail bool    `json:"cxlOnFail,omitempty"`
 	}
