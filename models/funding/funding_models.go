@@ -4,15 +4,21 @@ import "github.com/aiviaio/okex"
 
 type (
 	Currency struct {
-		Ccy         string `json:"ccy"`
-		Name        string `json:"name"`
-		Chain       string `json:"chain"`
-		MinWd       string `json:"minWd"`
-		MinFee      string `json:"minFee"`
-		MaxFee      string `json:"maxFee"`
-		CanDep      bool   `json:"canDep"`
-		CanWd       bool   `json:"canWd"`
-		CanInternal bool   `json:"canInternal"`
+		Ccy               string `json:"ccy"`
+		Name              string `json:"name"`
+		Chain             string `json:"chain"`
+		MinDep            string `json:"minDep"`
+		MinWd             string `json:"minWd"`
+		MaxWd             string `json:"maxWd"`
+		MinFee            string `json:"minFee"`
+		MaxFee            string `json:"maxFee"`
+		CanDep            bool   `json:"canDep"`
+		CanWd             bool   `json:"canWd"`
+		CanInternal       bool   `json:"canInternal"`
+		WdQuota           string `json:"wdQuota"`
+		UsedWdQuota       string `json:"usedWdQuota"`
+		DepQuotaFixed     string `json:"depQuotaFixed"`
+		UsedDepQuotaFixed string `json:"usedDepQuotaFixed"`
 	}
 	Balance struct {
 		Ccy       string `json:"ccy"`
