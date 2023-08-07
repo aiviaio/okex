@@ -20,6 +20,7 @@ type (
 		DepQuotaFixed     string `json:"depQuotaFixed"`
 		UsedDepQuotaFixed string `json:"usedDepQuotaFixed"`
 	}
+
 	Balance struct {
 		Ccy       string `json:"ccy"`
 		Bal       string `json:"bal"`
