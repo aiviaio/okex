@@ -37,7 +37,7 @@ type (
 		SubAcct string        `json:"subAcct"`
 		Label   string        `json:"label"`
 		AcctLv  string        `json:"acctLv"`
-		UUID    string        `json:"uuid"`
+		UID     string        `json:"uid"`
 		TS      okex.JSONTime `json:"ts"`
 	}
 	DeleteSubAccount struct {
@@ -86,13 +86,14 @@ type (
 		EffDate string `json:"effDate,omitempty"`
 	}
 	CreateDepositAddress struct {
-		Ccy   string        `json:"ccy,omitempty"`
-		Addr  string        `json:"addr,omitempty"`
-		Chain string        `json:"chain,omitempty"`
-		PmtID string        `json:"pmtId,omitempty"`
-		Tag   string        `json:"tag,omitempty"`
-		Memo  string        `json:"memo,omitempty"`
-		TS    okex.JSONTime `json:"ts,omitempty"`
+		Ccy     string        `json:"ccy,omitempty"`
+		Addr    string        `json:"addr,omitempty"`
+		Chain   string        `json:"chain,omitempty"`
+		PmtID   string        `json:"pmtId,omitempty"`
+		Tag     string        `json:"tag,omitempty"`
+		Memo    string        `json:"memo,omitempty"`
+		Comment string        `json:"comment,omitempty"`
+		TS      okex.JSONTime `json:"ts,omitempty"`
 	}
 	UpdateDepositAddress struct {
 		Ccy   string        `json:"ccy,omitempty"`
@@ -114,5 +115,19 @@ type (
 		TO       string `json:"to,omitempty"` // 6:Funding, 18:Trading account, Default is 6
 		Selected bool   `json:"selected"`     // Return true if the current deposit address is selected on the website page
 		CtAddr   string `json:"ctAddr,omitempty"`
+	}
+	GetDepositHistory struct {
+		SubAcct             string `json:"subAcct,omitempty"`
+		Ccy                 string `json:"ccy,omitempty"`
+		Chain               string `json:"chain,omitempty"`
+		Amt                 string `json:"amt,omitempty"`
+		From                string `json:"from,omitempty"`
+		AreaCodeFrom        string `json:"areaCodeFrom,omitempty"`
+		TO                  string `json:"to,omitempty"` // 6:Funding, 18:Trading account, Default is 6
+		TxId                string `json:"txId,omitempty"`
+		TS                  string `json:"ts,omitempty"`
+		State               string `json:"state,omitempty"`
+		DepId               string `json:"depId,omitempty"`
+		ActualDepBlkConfirm string `json:"actualDepBlkConfirm,omitempty"`
 	}
 )
