@@ -71,4 +71,8 @@ type (
 		responses.Basic
 		GetDepositAddress []*models.GetDepositAddress `json:"data,omitempty"`
 	}
+	GetDepositHistory struct {
+		responses.Basic
+		GetDepositHistory []*models.GetDepositHistory `json:"data,omitempty"`
+	}
 )

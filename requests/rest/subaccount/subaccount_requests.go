@@ -108,4 +108,14 @@ type (
 		SubAcct string `json:"subAcct"`
 		Ccy     string `json:"ccy"`
 	}
+	GetDepositHistory struct {
+		SubAcct string `json:"subAcct"`
+		Ccy     string `json:"ccy"`
+		TxId    string `json:"txId"`
+		Type    string `json:"type"`
+		State   string `json:"state"`
+		After   string `json:"after"`
+		Before  string `json:"before"`
+		Limit   string `json:"limit"`
+	}
 )
