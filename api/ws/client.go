@@ -241,12 +241,22 @@ func (c *ClientWs) dial(p bool) error {
 		err := c.receiver(p)
 		if err != nil {
 			fmt.Printf("receiver error: %v\n", err)
+			c.ErrChan <- &events.Error{
+				Event: "error",
+				Code:  60012,
+				Msg:   fmt.Sprintf("receiver error: %v", err.Error()),
+			}
 		}
 	}()
 	go func() {
 		err := c.sender(p)
 		if err != nil {
 			fmt.Printf("sender error: %v\n", err)
+			c.ErrChan <- &events.Error{
+				Event: "error",
+				Code:  60012,
+				Msg:   fmt.Sprintf("sender error: %v", err.Error()),
+			}
 		}
 	}()
 	c.conn[p] = conn
