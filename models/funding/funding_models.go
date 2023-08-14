@@ -6,6 +6,7 @@ type (
 	Currency struct {
 		Ccy               string `json:"ccy"`
 		Name              string `json:"name"`
+		LogoLink          string `json:"logoLink"`
 		Chain             string `json:"chain"`
 		MinDep            string `json:"minDep"`
 		MinWd             string `json:"minWd"`
