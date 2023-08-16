@@ -133,6 +133,6 @@ type (
 		Before   float64             `json:"before,omitempty,string"`
 		Limit    float64             `json:"limit,omitempty,string"`
 		OrdType  okex.AlgoOrderType  `json:"ordType,omitempty"`
-		State    okex.OrderState     `json:"algoIdstate,omitempty"`
+		State    okex.OrderState     `json:"state,omitempty"`
 	}
 )

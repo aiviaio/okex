@@ -42,14 +42,18 @@ type (
 		QuickMgnType string              `json:"quickMgnType"`
 		ReduceOnly   string              `json:"reduceOnly"`
 		Px           okex.JSONFloat64    `json:"px"`
-		Sz           okex.JSONInt64      `json:"sz"`
+		Sz           okex.JSONFloat64    `json:"sz"`
 		Pnl          okex.JSONFloat64    `json:"pnl"`
-		AccFillSz    okex.JSONInt64      `json:"accFillSz"`
+		AccFillSz    okex.JSONFloat64    `json:"accFillSz"`
 		FillPx       okex.JSONFloat64    `json:"fillPx"`
-		FillSz       okex.JSONInt64      `json:"fillSz"`
+		FillSz       okex.JSONFloat64    `json:"fillSz"`
 		FillTime     okex.JSONFloat64    `json:"fillTime"`
 		AvgPx        okex.JSONFloat64    `json:"avgPx"`
 		Lever        okex.JSONFloat64    `json:"lever"`
+		TpTriggerPx  okex.JSONFloat64    `json:"tpTriggerPx"`
+		TpOrdPx      okex.JSONFloat64    `json:"tpOrdPx"`
+		SlTriggerPx  okex.JSONFloat64    `json:"slTriggerPx"`
+		SlOrdPx      okex.JSONFloat64    `json:"slOrdPx"`
 		Fee          okex.JSONFloat64    `json:"fee"`
 		Rebate       okex.JSONFloat64    `json:"rebate"`
 		State        okex.OrderState     `json:"state"`
@@ -107,14 +111,14 @@ type (
 		PxVar           okex.JSONFloat64    `json:"pxVar"`
 		PxSpread        okex.JSONFloat64    `json:"pxSpread"`
 		PxLimit         okex.JSONFloat64    `json:"pxLimit"`
-		Sz              okex.JSONInt64      `json:"sz"`
-		SzLimit         okex.JSONInt64      `json:"szLimit"`
+		Sz              okex.JSONFloat64    `json:"sz"`
+		SzLimit         okex.JSONFloat64    `json:"szLimit"`
 		ActualSz        okex.JSONFloat64    `json:"actualSz"`
 		ActualPx        okex.JSONFloat64    `json:"actualPx"`
 		Pnl             okex.JSONFloat64    `json:"pnl"`
-		AccFillSz       okex.JSONInt64      `json:"accFillSz"`
+		AccFillSz       okex.JSONFloat64    `json:"accFillSz"`
 		FillPx          okex.JSONFloat64    `json:"fillPx"`
-		FillSz          okex.JSONInt64      `json:"fillSz"`
+		FillSz          okex.JSONFloat64    `json:"fillSz"`
 		FillTime        okex.JSONFloat64    `json:"fillTime"`
 		AvgPx           okex.JSONFloat64    `json:"avgPx"`
 		Lever           okex.JSONFloat64    `json:"lever"`
