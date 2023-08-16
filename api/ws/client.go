@@ -261,6 +261,9 @@ func (c *ClientWs) dial(p bool) error {
 		err := c.receiver(p)
 		if err != nil {
 			fmt.Printf("receiver error: %v\n", err)
+			c.mu[p].Lock()
+			c.conn[p].Close()
+			c.mu[p].Unlock()
 			c.ErrChan <- &events.Error{
 				Event: "error",
 				Code:  60012,
@@ -273,6 +276,9 @@ func (c *ClientWs) dial(p bool) error {
 		err := c.sender(p)
 		if err != nil {
 			fmt.Printf("sender error: %v\n", err)
+			c.mu[p].Lock()
+			c.conn[p].Close()
+			c.mu[p].Unlock()
 			c.ErrChan <- &events.Error{
 				Event: "error",
 				Code:  60012,
@@ -313,6 +319,10 @@ func (c *ClientWs) sender(p bool) error {
 
 			if _, err = w.Write(data); err != nil {
 				c.mu[p].RUnlock()
+				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
+					return c.conn[p].Close()
+				}
+
 				return err
 			}
 
@@ -482,7 +492,7 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 
 		return true
 	}
-	
+
 	go func() { c.RawEventChan <- e }()
 
 	return false
