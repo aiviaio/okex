@@ -18,6 +18,10 @@ type (
 		responses.Basic
 		Transfers []*models.Transfer `json:"data"`
 	}
+	FundsTransferState struct {
+		responses.Basic
+		TransfersState []*models.TransferState `json:"data"`
+	}
 	AssetBillsDetails struct {
 		responses.Basic
 		Bills []*models.Bill `json:"data"`
