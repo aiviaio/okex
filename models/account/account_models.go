@@ -53,6 +53,9 @@ type (
 		Pos         okex.JSONFloat64    `json:"pos"`
 		AvailPos    okex.JSONFloat64    `json:"availPos,omitempty"`
 		AvgPx       okex.JSONFloat64    `json:"avgPx"`
+		MarkPx      okex.JSONFloat64    `json:"markPx"`
+		IdxPx       okex.JSONFloat64    `json:"idxPx"`
+		UsdPx       okex.JSONFloat64    `json:"usdPx"`
 		Upl         okex.JSONFloat64    `json:"upl"`
 		UplRatio    okex.JSONFloat64    `json:"uplRatio"`
 		Lever       okex.JSONFloat64    `json:"lever"`

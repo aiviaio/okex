@@ -58,9 +58,10 @@ type (
 )
 
 const (
-	RestURL      = BaseURL("https://www.okex.com")
-	PublicWsURL  = BaseURL("wss://ws.okex.com:8443/ws/v5/public")
-	PrivateWsURL = BaseURL("wss://ws.okex.com:8443/ws/v5/private")
+	RestURL       = BaseURL("https://www.okex.com")
+	PublicWsURL   = BaseURL("wss://ws.okex.com:8443/ws/v5/public")
+	PrivateWsURL  = BaseURL("wss://ws.okex.com:8443/ws/v5/private")
+	BusinessWsURL = BaseURL("wss://ws.okx.com:8443/ws/v5/business")
 
 	AwsRestURL      = BaseURL("https://aws.okex.com")
 	AwsPublicWsURL  = BaseURL("wss://wsaws.okex.com:8443/ws/v5/public")
@@ -74,10 +75,11 @@ const (
 	OmegaPublicWsURL  = BaseURL("wss://ws.okex.com:8443/ws/v5/public?brokerId=200")
 	OmegaPrivateWsURL = BaseURL("wss://ws.okex.com:8443/ws/v5/private?brokerId=200")
 
-	NormalServer = Destination(iota + 1)
-	AwsServer    = NormalServer + 1
-	DemoServer   = AwsServer + 1
-	OmegaServer  = DemoServer + 1
+	NormalServer   = Destination(iota + 1)
+	AwsServer      = NormalServer + 1
+	DemoServer     = AwsServer + 1
+	OmegaServer    = DemoServer + 1
+	BusinessServer = OmegaServer + 1
 
 	SpotInstrument    = InstrumentType("SPOT")
 	MarginInstrument  = InstrumentType("MARGIN")

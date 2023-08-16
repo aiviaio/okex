@@ -72,6 +72,7 @@ func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url ma
 	c.Private = NewPrivate(c)
 	c.Public = NewPublic(c)
 	c.Trade = NewTrade(c)
+
 	return c
 }
 
@@ -82,12 +83,15 @@ func (c *ClientWs) Connect(p bool) error {
 	if c.conn[p] != nil {
 		return nil
 	}
+
 	err := c.dial(p)
 	if err == nil {
 		return nil
 	}
+
 	ticker := time.NewTicker(redialTick)
 	defer ticker.Stop()
+
 	for {
 		select {
 		case <-ticker.C:
@@ -108,9 +112,11 @@ func (c *ClientWs) Login() error {
 	if c.Authorized {
 		return nil
 	}
+
 	if c.AuthRequested != nil && time.Since(*c.AuthRequested).Seconds() < 30 {
 		return nil
 	}
+
 	now := time.Now()
 	c.AuthRequested = &now
 	method := http.MethodGet
@@ -124,6 +130,7 @@ func (c *ClientWs) Login() error {
 			"sign":       sign,
 		},
 	}
+
 	return c.Send(true, okex.LoginOperation, args)
 }
 
@@ -136,8 +143,10 @@ func (c *ClientWs) Subscribe(p bool, ch []okex.ChannelName, args map[string]stri
 	if len(ch) != 0 {
 		count = len(ch)
 	}
+
 	tmpArgs := make([]map[string]string, count)
 	tmpArgs[0] = args
+
 	for i, name := range ch {
 		tmpArgs[i] = map[string]string{}
 		tmpArgs[i]["channel"] = string(name)
@@ -145,6 +154,7 @@ func (c *ClientWs) Subscribe(p bool, ch []okex.ChannelName, args map[string]stri
 			tmpArgs[i][k] = v
 		}
 	}
+
 	return c.Send(p, okex.SubscribeOperation, tmpArgs)
 }
 
@@ -160,6 +170,7 @@ func (c *ClientWs) Unsubscribe(p bool, ch []okex.ChannelName, args map[string]st
 			tmpArgs[i][k] = v
 		}
 	}
+
 	return c.Send(p, okex.UnsubscribeOperation, tmpArgs)
 }
 
@@ -183,11 +194,13 @@ func (c *ClientWs) Send(p bool, op okex.Operation, args []map[string]string, ext
 		"op":   op,
 		"args": args,
 	}
+
 	for _, extra := range extras {
 		for k, v := range extra {
 			data[k] = v
 		}
 	}
+
 	j, err := json.Marshal(data)
 	if err != nil {
 		return err
@@ -212,16 +225,20 @@ func (c *ClientWs) WaitForAuthorization() error {
 	if c.Authorized {
 		return nil
 	}
+
 	if err := c.Login(); err != nil {
 		return err
 	}
+
 	ticker := time.NewTicker(time.Millisecond * 300)
 	defer ticker.Stop()
+
 	for range ticker.C {
 		if c.Authorized {
 			return nil
 		}
 	}
+
 	return nil
 }
 
@@ -233,10 +250,13 @@ func (c *ClientWs) dial(p bool) error {
 		if res != nil {
 			statusCode = res.StatusCode
 		}
+
 		c.mu[p].Unlock()
+
 		return fmt.Errorf("error %d: %w", statusCode, err)
 	}
 	defer res.Body.Close()
+
 	go func() {
 		err := c.receiver(p)
 		if err != nil {
@@ -248,6 +268,7 @@ func (c *ClientWs) dial(p bool) error {
 			}
 		}
 	}()
+
 	go func() {
 		err := c.sender(p)
 		if err != nil {
@@ -259,13 +280,17 @@ func (c *ClientWs) dial(p bool) error {
 			}
 		}
 	}()
+
 	c.conn[p] = conn
 	c.mu[p].Unlock()
+
 	return nil
 }
+
 func (c *ClientWs) sender(p bool) error {
 	ticker := time.NewTicker(time.Millisecond * 300)
 	defer ticker.Stop()
+
 	for {
 		c.mu[p].RLock()
 		dataChan := c.sendChan[p]
@@ -279,11 +304,13 @@ func (c *ClientWs) sender(p bool) error {
 				c.mu[p].RUnlock()
 				return err
 			}
+
 			w, err := c.conn[p].NextWriter(websocket.TextMessage)
 			if err != nil {
 				c.mu[p].RUnlock()
 				return err
 			}
+
 			if _, err = w.Write(data); err != nil {
 				c.mu[p].RUnlock()
 				return err
@@ -303,6 +330,7 @@ func (c *ClientWs) sender(p bool) error {
 					c.sendChan[p] <- []byte("ping")
 				}()
 			}
+
 			c.mu[p].RUnlock()
 		case <-c.ctx.Done():
 			return c.handleCancel("sender")
@@ -321,12 +349,14 @@ func (c *ClientWs) receiver(p bool) error {
 				c.mu[p].RUnlock()
 				return err
 			}
+
 			mt, data, err := c.conn[p].ReadMessage()
 			if err != nil {
 				c.mu[p].RUnlock()
 				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
 					return c.conn[p].Close()
 				}
+
 				return err
 			}
 			c.mu[p].RUnlock()
@@ -348,6 +378,7 @@ func (c *ClientWs) receiver(p bool) error {
 		}
 	}
 }
+
 func (c *ClientWs) sign(method, path string) (string, string) {
 	t := time.Now().UTC().Unix()
 	ts := fmt.Sprint(t)
@@ -355,12 +386,15 @@ func (c *ClientWs) sign(method, path string) (string, string) {
 	p := []byte(s)
 	h := hmac.New(sha256.New, c.secretKey)
 	h.Write(p)
+
 	return ts, base64.StdEncoding.EncodeToString(h.Sum(nil))
 }
+
 func (c *ClientWs) handleCancel(msg string) error {
 	go func() {
 		c.DoneChan <- msg
 	}()
+
 	return fmt.Errorf("operation cancelled: %s", msg)
 }
 
@@ -373,6 +407,7 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 		go func() {
 			c.ErrChan <- &e
 		}()
+
 		return true
 	case "subscribe":
 		e := events.Subscribe{}
@@ -381,8 +416,10 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 			if c.SubscribeChan != nil {
 				c.SubscribeChan <- &e
 			}
+
 			c.StructuredEventChan <- e
 		}()
+
 		return true
 	case "unsubscribe":
 		e := events.Unsubscribe{}
@@ -391,8 +428,10 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 			if c.UnsubscribeCh != nil {
 				c.UnsubscribeCh <- &e
 			}
+
 			c.StructuredEventChan <- e
 		}()
+
 		return true
 	case "login":
 		if time.Since(*c.AuthRequested).Seconds() > 30 {
@@ -400,29 +439,38 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 			_ = c.Login()
 			break
 		}
+
 		c.Authorized = true
+
 		e := events.Login{}
 		_ = json.Unmarshal(data, &e)
 		go func() {
 			if c.LoginChan != nil {
 				c.LoginChan <- &e
 			}
+
 			c.StructuredEventChan <- e
 		}()
+
 		return true
 	}
+
 	if c.Private.Process(data, e) {
 		return true
 	}
+
 	if c.Public.Process(data, e) {
 		return true
 	}
+
 	if e.ID != "" {
 		if e.Code != 0 {
 			ee := *e
 			ee.Event = "error"
+
 			return c.process(data, &ee)
 		}
+
 		e := events.Success{}
 		_ = json.Unmarshal(data, &e)
 		go func() {
@@ -431,8 +479,11 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 			}
 			c.StructuredEventChan <- e
 		}()
+
 		return true
 	}
+	
 	go func() { c.RawEventChan <- e }()
+
 	return false
 }
