@@ -78,6 +78,22 @@ func (c *Funding) FundsTransfer(req requests.FundsTransfer) (response responses.
 	return
 }
 
+// FundsTransferState
+//
+// https://www.okx.com/docs-v5/en/#funding-account-rest-api-get-funds-transfer-state
+func (c *Funding) FundsTransferState(req requests.FundsTransferState) (response responses.FundsTransferState, err error) {
+	p := "/api/v5/asset/transfer-state"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodGet, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
 // AssetBillsDetails
 // Query the billing record, you can get the latest 1 month historical data.
 //

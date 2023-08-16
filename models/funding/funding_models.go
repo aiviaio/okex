@@ -35,6 +35,16 @@ type (
 		From    okex.AccountType `json:"from,string"`
 		To      okex.AccountType `json:"to,string"`
 	}
+	TransferState struct {
+		TransID string           `json:"transId"`
+		Ccy     string           `json:"ccy"`
+		Amt     okex.JSONFloat64 `json:"amt"`
+		Type    string           `json:"type"`
+		From    okex.AccountType `json:"from,string"`
+		To      okex.AccountType `json:"to,string"`
+		SubAcct string           `json:"subAcct"`
+		State   string           `json:"state"`
+	}
 	Bill struct {
 		BillID string           `json:"billId"`
 		Ccy    string           `json:"ccy"`
