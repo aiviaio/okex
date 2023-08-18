@@ -261,14 +261,10 @@ func (c *ClientWs) dial(p bool) error {
 		err := c.receiver(p)
 		if err != nil {
 			fmt.Printf("receiver error: %v\n", err)
+			c.Cancel()
 			c.mu[p].Lock()
 			c.conn[p].Close()
 			c.mu[p].Unlock()
-			c.ErrChan <- &events.Error{
-				Event: "error",
-				Code:  60012,
-				Msg:   fmt.Sprintf("receiver error: %v", err.Error()),
-			}
 		}
 	}()
 
@@ -276,14 +272,10 @@ func (c *ClientWs) dial(p bool) error {
 		err := c.sender(p)
 		if err != nil {
 			fmt.Printf("sender error: %v\n", err)
+			c.Cancel()
 			c.mu[p].Lock()
 			c.conn[p].Close()
 			c.mu[p].Unlock()
-			c.ErrChan <- &events.Error{
-				Event: "error",
-				Code:  60012,
-				Msg:   fmt.Sprintf("sender error: %v", err.Error()),
-			}
 		}
 	}()
 
@@ -319,10 +311,6 @@ func (c *ClientWs) sender(p bool) error {
 
 			if _, err = w.Write(data); err != nil {
 				c.mu[p].RUnlock()
-				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-					return c.conn[p].Close()
-				}
-
 				return err
 			}
 
@@ -363,10 +351,6 @@ func (c *ClientWs) receiver(p bool) error {
 			mt, data, err := c.conn[p].ReadMessage()
 			if err != nil {
 				c.mu[p].RUnlock()
-				if websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure) {
-					return c.conn[p].Close()
-				}
-
 				return err
 			}
 			c.mu[p].RUnlock()
@@ -381,6 +365,7 @@ func (c *ClientWs) receiver(p bool) error {
 				if err := json.Unmarshal(data, &e); err != nil {
 					return err
 				}
+
 				go func() {
 					c.process(data, e)
 				}()
