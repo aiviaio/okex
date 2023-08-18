@@ -25,7 +25,7 @@ func NewSubAccount(c *ClientRest) *SubAccount {
 // ViewList
 // applies to master accounts only
 //
-// https://www.okex.com/docs-v5/en/#rest-api-subaccount-view-sub-account-list
+// https://www.okx.com/docs-v5/en/#sub-account-rest-api-get-sub-account-list
 func (c *SubAccount) ViewList(req requests.ViewList) (response responses.ViewList, err error) {
 	p := "/api/v5/users/subaccount/list"
 	m := okex.S2M(req)
@@ -156,6 +156,23 @@ func (c *SubAccount) ManageTransfers(req requests.ManageTransfers) (response res
 	p := "/api/v5/account/subaccount/transfer"
 	m := okex.S2M(req)
 	res, err := c.client.Do(http.MethodPost, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
+// ListSubAccount
+// applies to master accounts only
+//
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-get-sub-account-list
+func (c *SubAccount) ListSubAccount(req requests.ListSubAccount) (response responses.ListSubAccount, err error) {
+	p := "/api/v5/broker/nd/subaccount-info"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodGet, p, true, m)
 	if err != nil {
 		return
 	}

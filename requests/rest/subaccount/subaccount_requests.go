@@ -46,6 +46,12 @@ type (
 		From           okex.AccountType `json:"from,string"`
 		To             okex.AccountType `json:"to,string"`
 	}
+	ListSubAccount struct {
+		SubAcct string `json:"subAcct,omitempty"`
+		UUID    string `json:"uid,omitempty"`
+		Page    string `json:"page,omitempty"`
+		Limit   string `json:"limit,omitempty"` // Number of results per request. The maximum is 100; the default is 100
+	}
 	CreateSubAccount struct {
 		SubAcct string `json:"subAcct"`
 		Label   string `json:"label,omitempty"`

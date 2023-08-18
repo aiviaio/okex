@@ -27,6 +27,10 @@ type (
 		responses.Basic
 		Transfers []*models.Transfer `json:"data,omitempty"`
 	}
+	ListSubAccount struct {
+		responses.Basic
+		ListSubAccount []*models.ListSubAccount `json:"data,omitempty"`
+	}
 	CreateSubAccount struct {
 		responses.Basic
 		CreateSubAccount []*models.CreateSubAccount `json:"data,omitempty"`

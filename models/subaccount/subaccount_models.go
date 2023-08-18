@@ -6,12 +6,15 @@ import (
 
 type (
 	SubAccount struct {
-		SubAcct string        `json:"subAcct,omitempty"`
-		Label   string        `json:"label,omitempty"`
-		Mobile  string        `json:"mobile,omitempty"`
-		GAuth   bool          `json:"gAuth"`
-		Enable  bool          `json:"enable"`
-		TS      okex.JSONTime `json:"ts"`
+		SubAcct     string        `json:"subAcct,omitempty"`
+		Type        string        `json:"type"`
+		UUID        string        `json:"uid"`
+		Label       string        `json:"label,omitempty"`
+		Mobile      string        `json:"mobile,omitempty"`
+		GAuth       bool          `json:"gAuth"`
+		Enable      bool          `json:"enable"`
+		TS          okex.JSONTime `json:"ts"`
+		CanTransOut string        `json:"canTransOut"`
 	}
 	APIKey struct {
 		SubAcct    string        `json:"subAcct,omitempty"`
@@ -32,6 +35,18 @@ type (
 	}
 	Transfer struct {
 		TransID okex.JSONInt64 `json:"transId"`
+	}
+	ListSubAccount struct {
+		TotalPage string                  `json:"totalPage"`
+		Page      string                  `json:"page"`
+		Details   []*ListSubAccountDetail `json:"details"`
+	}
+	ListSubAccountDetail struct {
+		SubAcct string        `json:"subAcct"`
+		UUID    string        `json:"uid"`
+		Label   string        `json:"label"`
+		AcctLv  string        `json:"acctLv"`
+		TS      okex.JSONTime `json:"ts"`
 	}
 	CreateSubAccount struct {
 		SubAcct string        `json:"subAcct"`
