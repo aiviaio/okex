@@ -17,9 +17,9 @@ type (
 		To       okex.AccountType  `json:"to,string"`
 	}
 	FundsTransferState struct {
-		TransID  string `json:"transId"`
-		ClientID string `json:"clientId"`
-		Type     string `json:"type"`
+		TransID  string            `json:"transId"`
+		ClientID string            `json:"clientId"`
+		Type     okex.TransferType `json:"type,omitempty,string"`
 	}
 	AssetBillsDetails struct {
 		Type   okex.BillType `json:"type,string,omitempty"`

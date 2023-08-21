@@ -17,6 +17,12 @@ type (
 		Details     []*BalanceDetails `json:"details,omitempty"`
 		UTime       okex.JSONTime     `json:"uTime"`
 	}
+	BalancesFunding struct {
+		Ccy       string           `json:"ccy"`
+		Bal       okex.JSONFloat64 `json:"bal"`
+		FrozenBal okex.JSONFloat64 `json:"frozenBal"`
+		AvailBal  okex.JSONFloat64 `json:"availBal"`
+	}
 	BalanceDetails struct {
 		Ccy           string           `json:"ccy"`
 		Eq            okex.JSONFloat64 `json:"eq"`
