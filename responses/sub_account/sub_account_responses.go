@@ -15,9 +15,9 @@ type (
 		responses.Basic
 		APIKeys []*models.APIKey `json:"data,omitempty"`
 	}
-	GetBalance struct {
+	GetBalancesFunding struct {
 		responses.Basic
-		Balances []*account.Balance `json:"data,omitempty"`
+		BalancesFunding []*account.BalancesFunding `json:"data,omitempty"`
 	}
 	HistoryTransfer struct {
 		responses.Basic

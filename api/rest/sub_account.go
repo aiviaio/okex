@@ -131,6 +131,23 @@ func (c *SubAccount) GetBalance(req requests.GetBalance) (response responses.Get
 	return
 }
 
+// GetBalancesFunding
+// Query detailed balance info of Funding Account of a sub-account via the master account (applies to master accounts only)
+//
+// https://www.okx.com/docs-v5/en/#sub-account-rest-api-get-sub-account-funding-balance
+func (c *SubAccount) GetBalancesFunding(req requests.GetBalancesFunding) (response responses.GetBalancesFunding, err error) {
+	p := "/api/v5/asset/subaccount/balances"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodGet, p, true, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
+
 // HistoryTransfer
 // applies to master accounts only
 //
