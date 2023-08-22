@@ -66,15 +66,16 @@ type (
 		TS       okex.JSONTime    `json:"ts"`
 	}
 	DepositHistory struct {
-		Ccy   string            `json:"ccy"`
-		Chain string            `json:"chain"`
-		TxID  string            `json:"txId"`
-		From  string            `json:"from"`
-		To    string            `json:"to"`
-		DepId string            `json:"depId"`
-		Amt   okex.JSONFloat64  `json:"amt"`
-		State okex.DepositState `json:"state,string"`
-		TS    okex.JSONTime     `json:"ts"`
+		Ccy                 string            `json:"ccy"`
+		Chain               string            `json:"chain"`
+		TxID                string            `json:"txId"`
+		From                string            `json:"from"`
+		To                  string            `json:"to"`
+		DepId               string            `json:"depId"`
+		Amt                 okex.JSONFloat64  `json:"amt"`
+		State               okex.DepositState `json:"state,string"`
+		ActualDepBlkConfirm string            `json:"actualDepBlkConfirm"`
+		TS                  okex.JSONTime     `json:"ts"`
 	}
 	Withdrawal struct {
 		Ccy   string           `json:"ccy"`
