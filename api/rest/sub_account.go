@@ -416,7 +416,7 @@ func (c *SubAccount) GetDepositHistorySubAccount(req requests.GetDepositHistory)
 // applies to master accounts only
 //
 // https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-get-sub-account-withdrawal-history
-func (c *SubAccount) GetWithdrawHistorySubAccount(req requests.GetDepositHistory) (response responses.GetDepositHistory,
+func (c *SubAccount) GetWithdrawHistorySubAccount(req requests.GetWithdrawHistory) (response responses.GetWithdrawHistory,
 	err error) {
 	p := "/api/v5/asset/broker/nd/subaccount-withdrawal-history"
 	m := okex.S2M(req)
