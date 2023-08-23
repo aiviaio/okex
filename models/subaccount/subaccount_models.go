@@ -145,4 +145,24 @@ type (
 		DepId               string `json:"depId,omitempty"`
 		ActualDepBlkConfirm string `json:"actualDepBlkConfirm,omitempty"`
 	}
+	WithdrawHistory struct {
+		SubAcct          string               `json:"subAcct"`
+		Ccy              string               `json:"ccy"`
+		Chain            string               `json:"chain"`
+		NonTradableAsset string               `json:"nonTradableAsset"`
+		Amt              okex.JSONFloat64     `json:"amt"`
+		TS               okex.JSONTime        `json:"ts"`
+		To               string               `json:"to"`
+		AreaCodeTo       string               `json:"areaCodeTo,omitempty"`
+		Tag              string               `json:"tag,omitempty"`
+		PmtID            string               `json:"pmtId,omitempty"`
+		Memo             string               `json:"memo,omitempty"`
+		AddrEx           string               `json:"addrEx,omitempty"`
+		TxID             string               `json:"txId"`
+		Fee              okex.JSONFloat64     `json:"fee"`
+		FeeCcy           string               `json:"feeCcy"`
+		State            okex.WithdrawalState `json:"state,string"`
+		WdID             okex.JSONInt64       `json:"wdId"`
+		ClientID         string               `json:"clientId"`
+	}
 )
