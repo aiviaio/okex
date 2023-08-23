@@ -83,4 +83,8 @@ type (
 		responses.Basic
 		GetDepositHistory []*models.GetDepositHistory `json:"data,omitempty"`
 	}
+	GetWithdrawHistory struct {
+		responses.Basic
+		GetWithdrawHistory []*models.WithdrawHistory `json:"data,omitempty"`
+	}
 )

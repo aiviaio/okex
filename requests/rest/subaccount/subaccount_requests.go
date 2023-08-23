@@ -128,4 +128,16 @@ type (
 		Before  string `json:"before"`
 		Limit   string `json:"limit"`
 	}
+	GetWithdrawHistory struct {
+		SubAcct  string `json:"subAcct"`
+		Ccy      string `json:"ccy"`
+		WdID     string `json:"wdId"`
+		ClientId string `json:"clientId"`
+		TxID     string `json:"txId"`
+		Type     string `json:"type"`
+		State    string `json:"state"`
+		After    string `json:"after"`
+		Before   string `json:"before"`
+		Limit    string `json:"limit"`
+	}
 )
