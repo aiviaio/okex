@@ -277,6 +277,7 @@ const (
 
 	APIKeyReadOnly = APIKeyAccess("read_only")
 	APIKeyTrade    = APIKeyAccess("trade")
+	APIKeyWithdraw = APIKeyAccess("withdraw")
 
 	OptionCall = OptionType("C")
 	OptionPut  = OptionType("P")
