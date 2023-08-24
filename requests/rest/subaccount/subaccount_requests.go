@@ -101,11 +101,11 @@ type (
 		EffDate  string `json:"effDate,omitempty"`
 	}
 	CreateDepositAddress struct {
-		SubAcct  string `json:"subAcct"`
-		Ccy      string `json:"ccy"`
-		Chain    string `json:"chain,omitempty"`
-		AddrType string `json:"addrType,omitempty"` // 1: Regular address, 2:SegWit address (Only applicable to BTC/LTC), Default is 1
-		TO       string `json:"to,omitempty"`       // 6:Funding, 18:Trading account, Default is 6
+		SubAcct  string           `json:"subAcct"`
+		Ccy      string           `json:"ccy"`
+		Chain    string           `json:"chain,omitempty"`
+		AddrType string           `json:"addrType,omitempty"` // 1: Regular address, 2:SegWit address (Only applicable to BTC/LTC), Default is 1
+		TO       okex.AccountType `json:"to,string"`          // 6:Funding, 18:Trading account, Default is 6
 	}
 	UpdateDepositAddress struct {
 		SubAcct  string `json:"subAcct"`
