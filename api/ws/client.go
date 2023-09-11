@@ -7,12 +7,13 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/aiviaio/okex"
-	"github.com/aiviaio/okex/events"
-	"github.com/gorilla/websocket"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/aiviaio/okex"
+	"github.com/aiviaio/okex/events"
+	"github.com/gorilla/websocket"
 )
 
 // ClientWs is the websocket api client
@@ -366,9 +367,7 @@ func (c *ClientWs) receiver(p bool) error {
 					return err
 				}
 
-				go func() {
-					c.process(data, e)
-				}()
+				c.process(data, e)
 			}
 		}
 	}
@@ -468,12 +467,10 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 
 		e := events.Success{}
 		_ = json.Unmarshal(data, &e)
-		go func() {
-			if c.SuccessChan != nil {
-				c.SuccessChan <- &e
-			}
-			c.StructuredEventChan <- e
-		}()
+		if c.SuccessChan != nil {
+			c.SuccessChan <- &e
+		}
+		c.StructuredEventChan <- e
 
 		return true
 	}
