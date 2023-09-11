@@ -3,11 +3,12 @@ package ws
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
+
 	"github.com/aiviaio/okex"
 	"github.com/aiviaio/okex/events"
 	"github.com/aiviaio/okex/events/public"
 	requests "github.com/aiviaio/okex/requests/ws/public"
-	"strings"
 )
 
 // Public
@@ -559,12 +560,10 @@ func (c *Public) Process(data []byte, e *events.Basic) bool {
 				if err != nil {
 					return false
 				}
-				go func() {
-					if c.obCh != nil {
-						c.obCh <- &e
-					}
-					c.StructuredEventChan <- e
-				}()
+				if c.obCh != nil {
+					c.obCh <- &e
+				}
+				c.StructuredEventChan <- e
 				return true
 			}
 		}
