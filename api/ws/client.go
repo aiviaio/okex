@@ -406,13 +406,11 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 	case "subscribe":
 		e := events.Subscribe{}
 		_ = json.Unmarshal(data, &e)
-		go func() {
-			if c.SubscribeChan != nil {
-				c.SubscribeChan <- &e
-			}
+		if c.SubscribeChan != nil {
+			c.SubscribeChan <- &e
+		}
 
-			c.StructuredEventChan <- e
-		}()
+		c.StructuredEventChan <- e
 
 		return true
 	case "unsubscribe":
