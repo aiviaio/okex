@@ -467,12 +467,11 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 
 		e := events.Success{}
 		_ = json.Unmarshal(data, &e)
-		go func() {
-			if c.SuccessChan != nil {
-				c.SuccessChan <- &e
-			}
-			c.StructuredEventChan <- e
-		}()
+
+		if c.SuccessChan != nil {
+			c.SuccessChan <- &e
+		}
+		c.StructuredEventChan <- e
 
 		return true
 	}
