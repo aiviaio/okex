@@ -366,7 +366,7 @@ func (c *ClientWs) receiver(p bool) error {
 				if err := json.Unmarshal(data, &e); err != nil {
 					return err
 				}
-				c.process(data, e)
+				_ = c.process(data, e)
 			}
 		}
 	}
