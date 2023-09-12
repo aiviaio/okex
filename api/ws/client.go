@@ -448,15 +448,17 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 
 		return true
 	}
-
+	log.Default().Printf("before Private")
 	if c.Private.Process(data, e) {
 		return true
 	}
 
+	log.Default().Printf("before Public")
 	if c.Public.Process(data, e) {
 		return true
 	}
 
+	log.Default().Printf("before ID")
 	if e.ID != "" {
 		if e.Code != 0 {
 			ee := *e
@@ -475,7 +477,7 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 
 		return true
 	}
-
+	log.Default().Printf("after ID")
 	go func() { c.RawEventChan <- e }()
 
 	return false
