@@ -7,6 +7,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"sync"
 	"time"
@@ -366,7 +367,9 @@ func (c *ClientWs) receiver(p bool) error {
 				if err := json.Unmarshal(data, &e); err != nil {
 					return err
 				}
+				log.Default().Printf("before process")
 				_ = c.process(data, e)
+				log.Default().Printf("after process")
 			}
 		}
 	}
