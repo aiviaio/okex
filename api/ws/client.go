@@ -367,7 +367,7 @@ func (c *ClientWs) receiver(p bool) error {
 					return err
 				}
 				go c.process(data, e)
-				time.Sleep(time.Millisecond * 1)
+				time.Sleep(time.Millisecond * 50)
 			}
 		}
 	}
