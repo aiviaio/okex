@@ -44,11 +44,13 @@ type (
 	}
 	ManageTransfers struct {
 		Ccy            string           `json:"ccy"`
-		FromSubAccount string           `json:"fromSubAccount"`
-		ToSubAccount   string           `json:"tiSubAccount"`
 		Amt            float64          `json:"amt,string"`
 		From           okex.AccountType `json:"from,string"`
 		To             okex.AccountType `json:"to,string"`
+		FromSubAccount string           `json:"fromSubAccount"`
+		ToSubAccount   string           `json:"tiSubAccount"`
+		LoanTrans      bool             `json:"loanTrans"`
+		OmitPosRisk    string           `json:"omitPosRisk"`
 	}
 	ListSubAccount struct {
 		SubAcct string `json:"subAcct,omitempty"`
