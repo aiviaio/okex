@@ -363,11 +363,10 @@ func (c *ClientWs) receiver(p bool) error {
 
 			if mt == websocket.TextMessage && string(data) != "pong" {
 				e := &events.Basic{}
-				if err := json.Unmarshal(data, &e); err != nil {
+				if err := json.Unmarshal(data, e); err != nil {
 					return err
 				}
-
-				c.process(data, e)
+				go c.process(data, e)
 			}
 		}
 	}
