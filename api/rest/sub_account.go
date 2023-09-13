@@ -168,9 +168,10 @@ func (c *SubAccount) HistoryTransfer(req requests.HistoryTransfer) (response res
 // ManageTransfers
 // applies to master accounts only
 //
-// https://www.okex.com/docs-v5/en/#rest-api-subaccount-master-accounts-manage-the-transfers-between-sub-accounts
+// Only API keys with Trade privilege can call this endpoint
+// https://www.okx.com/docs-v5/en/#sub-account-rest-api-master-accounts-manage-the-transfers-between-sub-accounts
 func (c *SubAccount) ManageTransfers(req requests.ManageTransfers) (response responses.ManageTransfer, err error) {
-	p := "/api/v5/account/subaccount/transfer"
+	p := "/api/v5/asset/subaccount/transfer"
 	m := okex.S2M(req)
 	res, err := c.client.Do(http.MethodPost, p, true, m)
 	if err != nil {
