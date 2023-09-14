@@ -48,7 +48,7 @@ type (
 		From           okex.AccountType `json:"from,string"`
 		To             okex.AccountType `json:"to,string"`
 		FromSubAccount string           `json:"fromSubAccount"`
-		ToSubAccount   string           `json:"tiSubAccount"`
+		ToSubAccount   string           `json:"toSubAccount"`
 		LoanTrans      bool             `json:"loanTrans"`
 		OmitPosRisk    string           `json:"omitPosRisk"`
 	}
