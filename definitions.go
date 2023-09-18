@@ -223,6 +223,7 @@ const (
 	AlgoOrderTrigger     = AlgoOrderType("trigger")
 	AlgoOrderIceberg     = AlgoOrderType("iceberg")
 	AlgoOrderTwap        = AlgoOrderType("twap")
+	AlgoOrderTrailing    = AlgoOrderType("move_order_stop")
 
 	QuantityBaseCcy  = QuantityType("base_ccy")
 	QuantityQuoteCcy = QuantityType("quote_ccy")

@@ -82,7 +82,7 @@ type (
 		Side         okex.OrderSide     `json:"side"`
 		PosSide      okex.PositionSide  `json:"posSide,omitempty"`
 		OrdType      okex.AlgoOrderType `json:"ordType"`
-		Sz           int64              `json:"sz,string"`
+		Sz           float64            `json:"sz"`
 		ReduceOnly   bool               `json:"reduceOnly,omitempty"`
 		QuickMgnType string             `json:"quickMgnType,omitempty"`
 		TgtCcy       okex.QuantityType  `json:"tgtCcy,omitempty"`
