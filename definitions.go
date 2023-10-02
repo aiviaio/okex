@@ -50,6 +50,8 @@ type (
 	WithdrawalDestination uint8
 	WithdrawalState       int8
 
+	ConvertType uint8
+
 	JSONFloat64 float64
 	JSONInt64   int64
 	JSONTime    time.Time
@@ -314,6 +316,9 @@ const (
 	CandleStick5m  = CandleStickWsBarSize("candle5m")
 	CandleStick3m  = CandleStickWsBarSize("candle3m")
 	CandleStick1m  = CandleStickWsBarSize("candle1m")
+
+	ConvertTypeContract = ConvertType(1)
+	ConvertTypeCurrency = ConvertType(2)
 )
 
 func (t JSONTime) String() string { return time.Time(t).String() }
