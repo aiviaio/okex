@@ -240,3 +240,19 @@ func (c *PublicData) GetUnderlying(req requests.GetUnderlying) (response respons
 	err = d.Decode(&response)
 	return
 }
+
+// ConvertUnit
+//
+// https://www.okx.com/docs-v5/en/#public-data-rest-api-unit-convert
+func (c *PublicData) ConvertUnit(req requests.UnitConvert) (response responses.UnitConvert, err error) {
+	p := "/api/v5/public/convert-contract-coin"
+	m := okex.S2M(req)
+	res, err := c.client.Do(http.MethodGet, p, false, m)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}

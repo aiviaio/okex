@@ -66,4 +66,8 @@ type (
 		responses.Basic
 		States []publicdata.State `json:"data,omitempty"`
 	}
+	UnitConvert struct {
+		responses.Basic
+		Data []publicdata.UnitConvert `json:"data"`
+	}
 )

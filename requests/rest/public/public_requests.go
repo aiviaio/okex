@@ -69,4 +69,11 @@ type (
 	Status struct {
 		State string `json:"state,omitempty"`
 	}
+	UnitConvert struct {
+		Type   okex.ConvertType `json:"type,string,omitempty"`
+		InstID string           `json:"instId"`
+		Sz     float64          `json:"sz,omitempty,string"`
+		Px     float64          `json:"px,omitempty,string"`
+		Unit   string           `json:"unit,omitempty"`
+	}
 )

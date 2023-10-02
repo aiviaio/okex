@@ -160,4 +160,11 @@ type (
 		Begin       okex.JSONTime `json:"begin"`
 		End         okex.JSONTime `json:"end"`
 	}
+	UnitConvert struct {
+		Type   okex.ConvertType `json:"type,string,omitempty"`
+		InstID string           `json:"instId"`
+		Px     okex.JSONFloat64 `json:"px,omitempty"`
+		Sz     okex.JSONFloat64 `json:"sz,omitempty"`
+		Unit   string           `json:"unit,omitempty"`
+	}
 )
