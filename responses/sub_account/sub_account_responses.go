@@ -15,6 +15,10 @@ type (
 		responses.Basic
 		APIKeys []*models.APIKey `json:"data,omitempty"`
 	}
+	ResetAPIKey struct {
+		responses.Basic
+		APIKeys []*models.ResetAPIKey `json:"data,omitempty"`
+	}
 	GetBalance struct {
 		responses.Basic
 		Balance []*account.Balance `json:"data,omitempty"`

@@ -18,6 +18,13 @@ type (
 		IP         []string          `json:"ip,omitempty"`
 		Perm       okex.APIKeyAccess `json:"perm,omitempty"`
 	}
+	ResetAPIKey struct {
+		SubAcct string            `json:"subAcct"`
+		ApiKey  string            `json:"apiKey"`
+		Label   string            `json:"label"`
+		IP      []string          `json:"ip,omitempty"`
+		Perm    okex.APIKeyAccess `json:"perm,omitempty"`
+	}
 	QueryAPIKey struct {
 		APIKey  string `json:"apiKey"`
 		SubAcct string `json:"subAcct"`
