@@ -79,9 +79,9 @@ func (c *SubAccount) QueryAPIKey(req requests.QueryAPIKey) (response responses.A
 // ResetAPIKey
 // applies to master accounts only
 //
-// https://www.okex.com/docs-v5/en/#rest-api-subaccount-reset-the-apikey-of-a-sub-account
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-reset-the-api-key-of-a-sub-account
 func (c *SubAccount) ResetAPIKey(req requests.ResetAPIKey) (response responses.ResetAPIKey, err error) {
-	p := "/api/v5/users/subaccount/modify-apikey"
+	p := "/api/v5/broker/nd/subaccount/modify-apikey"
 	m := okex.S2M(req)
 	if len(req.IP) > 0 {
 		m["ip"] = strings.Join(req.IP, ",")
