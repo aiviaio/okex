@@ -78,7 +78,6 @@ func (c *SubAccount) QueryAPIKey(req requests.QueryAPIKey) (response responses.A
 
 // ResetAPIKey
 // applies to master accounts only
-//
 // https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-reset-the-api-key-of-a-sub-account
 func (c *SubAccount) ResetAPIKey(req requests.ResetAPIKey) (response responses.ResetAPIKey, err error) {
 	p := "/api/v5/broker/nd/subaccount/modify-apikey"
