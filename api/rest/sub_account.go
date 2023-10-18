@@ -241,6 +241,9 @@ func (c *SubAccount) CreateAPIKeySubAccount(req requests.CreatAPIKeySubAccount) 
 	response responses.CreatAPIKeySubAccount, err error) {
 	p := "/api/v5/broker/nd/subaccount/apikey"
 	m := okex.S2M(req)
+	if len(req.IP) > 0 {
+		m["ip"] = strings.Join(req.IP, ",")
+	}
 	res, err := c.client.Do(http.MethodPost, p, true, m)
 	if err != nil {
 		return
