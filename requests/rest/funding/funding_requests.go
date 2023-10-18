@@ -66,4 +66,7 @@ type (
 	GetPiggyBankBalance struct {
 		Ccy string `json:"ccy,omitempty"`
 	}
+	SmallAssetConvert struct {
+		Ccy []string `json:"ccy"`
+	}
 )

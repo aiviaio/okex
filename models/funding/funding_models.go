@@ -108,4 +108,14 @@ type (
 		Amt      okex.JSONFloat64 `json:"amt"`
 		Earnings okex.JSONFloat64 `json:"earnings"`
 	}
+	Detail struct {
+		Ccy    string           `json:"ccy"`
+		Amt    okex.JSONFloat64 `json:"amt"`
+		CnvAmt okex.JSONFloat64 `json:"cnvAmt"`
+		Fee    okex.JSONFloat64 `json:"fee"`
+	}
+	SmallAssetConvert struct {
+		TotalCnvAmt string    `json:"totalCnvAmt"`
+		Details     []*Detail `json:"details"`
+	}
 )

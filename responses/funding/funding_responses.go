@@ -50,4 +50,8 @@ type (
 		responses.Basic
 		Balances []*models.PiggyBankBalance `json:"data"`
 	}
+	SmallAssetConvert struct {
+		responses.Basic
+		SmallAssetConvert []*models.SmallAssetConvert `json:"data"`
+	}
 )
