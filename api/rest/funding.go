@@ -210,3 +210,18 @@ func (c *Funding) GetPiggyBankBalance(req requests.GetPiggyBankBalance) (respons
 	err = d.Decode(&response)
 	return
 }
+
+// SmallAssetConvert
+//
+// https://www.okx.com/docs-v5/en/#funding-account-rest-api-small-assets-convert
+func (c *Funding) SmallAssetConvert(req requests.SmallAssetConvert) (response responses.SmallAssetConvert, err error) {
+	p := "/api/v5/asset/convert-dust-assets"
+	res, err := c.client.DoBatch(p, req)
+	if err != nil {
+		return
+	}
+	defer res.Body.Close()
+	d := json.NewDecoder(res.Body)
+	err = d.Decode(&response)
+	return
+}
