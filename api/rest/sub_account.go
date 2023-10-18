@@ -62,9 +62,9 @@ func (c *SubAccount) CreateAPIKey(req requests.CreateAPIKey) (response responses
 // QueryAPIKey
 // applies to master accounts only
 //
-// https://www.okex.com/docs-v5/en/#rest-api-subaccount-query-the-apikey-of-a-sub-account
-func (c *SubAccount) QueryAPIKey(req requests.QueryAPIKey) (response responses.APIKey, err error) {
-	p := "/api/v5/users/subaccount/apikey"
+// https://www.okx.com/docs-v5/broker_en/#non-disclosed-broker-api-query-the-api-key-of-a-sub-account
+func (c *SubAccount) QueryAPIKey(req requests.QueryAPIKey) (response responses.QueryAPIKey, err error) {
+	p := "/api/v5/broker/nd/subaccount/apikey"
 	m := okex.S2M(req)
 	res, err := c.client.Do(http.MethodGet, p, true, m)
 	if err != nil {
