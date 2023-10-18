@@ -26,6 +26,13 @@ type (
 		IP         string        `json:"ip,omitempty"`
 		TS         okex.JSONTime `json:"ts,omitempty"`
 	}
+	QueryAPIKey struct {
+		Label  string        `json:"label,omitempty"`
+		APIKey string        `json:"apiKey,omitempty"`
+		Perm   string        `json:"perm,omitempty"`
+		IP     string        `json:"ip,omitempty"`
+		TS     okex.JSONTime `json:"ts,omitempty"`
+	}
 	ResetAPIKey struct {
 		SubAcct string        `json:"subAcct,omitempty"`
 		Label   string        `json:"label,omitempty"`

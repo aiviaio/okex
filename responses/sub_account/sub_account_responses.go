@@ -15,6 +15,10 @@ type (
 		responses.Basic
 		APIKeys []*models.APIKey `json:"data,omitempty"`
 	}
+	QueryAPIKey struct {
+		responses.Basic
+		APIKeys []*models.QueryAPIKey `json:"data,omitempty"`
+	}
 	ResetAPIKey struct {
 		responses.Basic
 		APIKeys []*models.ResetAPIKey `json:"data,omitempty"`
