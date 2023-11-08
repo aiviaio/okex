@@ -144,6 +144,70 @@ func (o *OrderBookEntity) UnmarshalJSON(buf []byte) error {
 	return nil
 }
 
+func (c *Candlesticks) UnmarshalJSON(buf []byte) error {
+	var (
+		o, h, l, cl, vol, volCcy, volCcyQuote, confirm, ts string
+		err                                                error
+	)
+	tmp := []interface{}{&ts, &o, &h, &l, &cl, &vol, &volCcy, &volCcyQuote, &confirm}
+	wantLen := len(tmp)
+	if err := json.Unmarshal(buf, &tmp); err != nil {
+		return err
+	}
+
+	if g, e := len(tmp), wantLen; g != e {
+		return fmt.Errorf("wrong number of fields in Candle: %d != %d", g, e)
+	}
+
+	timestamp, err := strconv.ParseInt(ts, 10, 64)
+	if err != nil {
+		return err
+	}
+	*(*time.Time)(&c.TS) = time.UnixMilli(timestamp)
+
+	c.O, err = strconv.ParseFloat(o, 64)
+	if err != nil {
+		return err
+	}
+
+	c.H, err = strconv.ParseFloat(h, 64)
+	if err != nil {
+		return err
+	}
+
+	c.L, err = strconv.ParseFloat(l, 64)
+	if err != nil {
+		return err
+	}
+
+	c.C, err = strconv.ParseFloat(cl, 64)
+	if err != nil {
+		return err
+	}
+
+	c.Vol, err = strconv.ParseFloat(vol, 64)
+	if err != nil {
+		return err
+	}
+
+	c.VolCcy, err = strconv.ParseFloat(volCcy, 64)
+	if err != nil {
+		return err
+	}
+
+	c.VolCcyQuote, err = strconv.ParseFloat(volCcyQuote, 64)
+	if err != nil {
+		return err
+	}
+	confirmInt, err := strconv.Atoi(confirm)
+	if err != nil {
+		return err
+	}
+	c.Confirm = int64(confirmInt)
+
+	return nil
+}
+
 func (c *Candle) UnmarshalJSON(buf []byte) error {
 	var (
 		o, h, l, cl, vol, volCcy, ts string
