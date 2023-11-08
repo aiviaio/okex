@@ -22,6 +22,10 @@ type (
 		responses.Basic
 		Candles []*market.Candle `json:"data,omitempty"`
 	}
+	Candlesticks struct {
+		responses.Basic
+		Candlesticks []*market.Candlesticks `json:"data,omitempty"`
+	}
 	IndexCandle struct {
 		responses.Basic
 		Candles []*market.IndexCandle `json:"data,omitempty"`
