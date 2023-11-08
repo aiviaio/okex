@@ -20,10 +20,17 @@ type (
 	}
 	GetCandlesticks struct {
 		InstID string       `json:"instId"`
+		Bar    okex.BarSize `json:"bar,omitempty"`
 		After  int64        `json:"after,omitempty,string"`
 		Before int64        `json:"before,omitempty,string"`
 		Limit  int64        `json:"limit,omitempty,string"`
+	}
+	Candlesticks struct {
+		InstID string       `json:"instId"`
 		Bar    okex.BarSize `json:"bar,omitempty"`
+		After  int64        `json:"after,omitempty,string"`
+		Before int64        `json:"before,omitempty,string"`
+		Limit  int64        `json:"limit,omitempty,string"`
 	}
 	GetTrades struct {
 		InstID string `json:"instId"`
