@@ -29,7 +29,6 @@ type ClientWs struct {
 	ctx           context.Context
 	Cancel        context.CancelFunc
 	DoneChan      chan interface{}
-	RawEventChan  chan *events.Basic
 	ErrChan       chan *events.Error
 	SubscribeChan chan *events.Subscribe
 	UnsubscribeCh chan *events.Unsubscribe
@@ -65,7 +64,6 @@ func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url ma
 		Cancel:       cancel,
 		sendChan:     map[bool]chan []byte{true: make(chan []byte, 3), false: make(chan []byte, 3)},
 		DoneChan:     make(chan interface{}),
-		RawEventChan: make(chan *events.Basic),
 		lastTransmit: make(map[bool]*time.Time),
 	}
 
@@ -464,8 +462,6 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 
 		return true
 	}
-
-	go func() { c.RawEventChan <- e }()
 
 	return false
 }
