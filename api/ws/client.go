@@ -20,29 +20,27 @@ import (
 //
 // https://www.okex.com/docs-v5/en/#websocket-api
 type ClientWs struct {
-	Cancel              context.CancelFunc
-	DoneChan            chan interface{}
-	StructuredEventChan chan interface{}
-	RawEventChan        chan *events.Basic
-	ErrChan             chan *events.Error
-	SubscribeChan       chan *events.Subscribe
-	UnsubscribeCh       chan *events.Unsubscribe
-	LoginChan           chan *events.Login
-	SuccessChan         chan *events.Success
-	sendChan            map[bool]chan []byte
-	url                 map[bool]okex.BaseURL
-	conn                map[bool]*websocket.Conn
-	apiKey              string
-	secretKey           []byte
-	passphrase          string
-	lastTransmit        map[bool]*time.Time
-	mu                  map[bool]*sync.RWMutex
-	AuthRequested       *time.Time
-	Authorized          bool
-	Private             *Private
-	Public              *Public
-	Trade               *Trade
-	ctx                 context.Context
+	url           map[bool]okex.BaseURL
+	apiKey        string
+	secretKey     []byte
+	passphrase    string
+	conn          map[bool]*websocket.Conn
+	mu            map[bool]*sync.RWMutex
+	ctx           context.Context
+	Cancel        context.CancelFunc
+	DoneChan      chan interface{}
+	ErrChan       chan *events.Error
+	SubscribeChan chan *events.Subscribe
+	UnsubscribeCh chan *events.Unsubscribe
+	LoginChan     chan *events.Login
+	SuccessChan   chan *events.Success
+	sendChan      map[bool]chan []byte
+	lastTransmit  map[bool]*time.Time
+	AuthRequested *time.Time
+	Authorized    bool
+	Private       *Private
+	Public        *Public
+	Trade         *Trade
 }
 
 const (
@@ -56,20 +54,19 @@ const (
 func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url map[bool]okex.BaseURL) *ClientWs {
 	ctx, cancel := context.WithCancel(ctx)
 	c := &ClientWs{
-		apiKey:              apiKey,
-		secretKey:           []byte(secretKey),
-		passphrase:          passphrase,
-		ctx:                 ctx,
-		Cancel:              cancel,
-		url:                 url,
-		sendChan:            map[bool]chan []byte{true: make(chan []byte, 3), false: make(chan []byte, 3)},
-		DoneChan:            make(chan interface{}),
-		StructuredEventChan: make(chan interface{}),
-		RawEventChan:        make(chan *events.Basic),
-		conn:                make(map[bool]*websocket.Conn),
-		lastTransmit:        make(map[bool]*time.Time),
-		mu:                  map[bool]*sync.RWMutex{true: {}, false: {}},
+		url:          url,
+		apiKey:       apiKey,
+		secretKey:    []byte(secretKey),
+		passphrase:   passphrase,
+		conn:         make(map[bool]*websocket.Conn),
+		mu:           map[bool]*sync.RWMutex{true: {}, false: {}},
+		ctx:          ctx,
+		Cancel:       cancel,
+		sendChan:     map[bool]chan []byte{true: make(chan []byte, 3), false: make(chan []byte, 3)},
+		DoneChan:     make(chan interface{}),
+		lastTransmit: make(map[bool]*time.Time),
 	}
+
 	c.Private = NewPrivate(c)
 	c.Public = NewPublic(c)
 	c.Trade = NewTrade(c)
@@ -409,8 +406,6 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 			c.SubscribeChan <- &e
 		}
 
-		c.StructuredEventChan <- e
-
 		return true
 	case "unsubscribe":
 		e := events.Unsubscribe{}
@@ -419,8 +414,6 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 			if c.UnsubscribeCh != nil {
 				c.UnsubscribeCh <- &e
 			}
-
-			c.StructuredEventChan <- e
 		}()
 
 		return true
@@ -439,8 +432,6 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 			if c.LoginChan != nil {
 				c.LoginChan <- &e
 			}
-
-			c.StructuredEventChan <- e
 		}()
 
 		return true
@@ -468,12 +459,9 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 		if c.SuccessChan != nil {
 			c.SuccessChan <- &e
 		}
-		c.StructuredEventChan <- e
 
 		return true
 	}
-
-	go func() { c.RawEventChan <- e }()
 
 	return false
 }
