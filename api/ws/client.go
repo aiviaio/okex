@@ -63,7 +63,7 @@ func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url ma
 		ctx:          ctx,
 		Cancel:       cancel,
 		sendChan:     map[bool]chan []byte{true: make(chan []byte, 3), false: make(chan []byte, 3)},
-		DoneChan:     make(chan interface{}),
+		DoneChan:     make(chan interface{}, 32),
 		lastTransmit: make(map[bool]*time.Time),
 	}
 
@@ -395,7 +395,9 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 		e := events.Error{}
 		_ = json.Unmarshal(data, &e)
 		go func() {
-			c.ErrChan <- &e
+			if c.ErrChan != nil {
+				c.ErrChan <- &e
+			}
 		}()
 
 		return true
