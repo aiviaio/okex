@@ -18,8 +18,7 @@ type (
 		Data  []*Argument    `json:"data,omitempty"`
 	}
 	Argument struct {
-		arg        map[string]interface{}
-		untypedArg []interface{}
+		arg map[string]interface{}
 	}
 	Success struct {
 		Code int            `json:"code,omitempty,string"`
@@ -55,13 +54,16 @@ type (
 
 func (a *Argument) Get(k string) (interface{}, bool) {
 	v, ok := a.arg[k]
+
 	return v, ok
 }
 
 func (a *Argument) UnmarshalJSON(buf []byte) error {
 	a.arg = make(map[string]interface{})
-	if json.Unmarshal(buf, &a.arg) != nil {
-		return json.Unmarshal(buf, &a.untypedArg)
+
+	err := json.Unmarshal(buf, &a.arg)
+	if err != nil {
+		return err
 	}
 
 	return nil
