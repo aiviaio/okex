@@ -20,8 +20,8 @@ type (
 		OpenInterests []*publicdata.OpenInterest `json:"data"`
 	}
 	Candlesticks struct {
-		Arg     *events.Argument         `json:"arg"`
-		Candles [][]*market.Candlesticks `json:"data"`
+		Arg     *events.Argument       `json:"arg"`
+		Candles []*market.Candlesticks `json:"data"`
 	}
 	Trades struct {
 		Arg    *events.Argument `json:"arg"`
