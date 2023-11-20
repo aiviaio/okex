@@ -55,7 +55,6 @@ type (
 
 func (a *Argument) Get(k string) (interface{}, bool) {
 	v, ok := a.arg[k]
-
 	return v, ok
 }
 
