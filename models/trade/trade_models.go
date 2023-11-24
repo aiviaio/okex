@@ -33,7 +33,9 @@ type (
 		InstID       string              `json:"instId"`
 		Ccy          string              `json:"ccy"`
 		OrdID        string              `json:"ordId"`
+		AlgoID       string              `json:"algoId"`
 		ClOrdID      string              `json:"clOrdId"`
+		AlgoClOrdID  string              `json:"algoClOrdId"`
 		TradeID      string              `json:"tradeId"`
 		Tag          string              `json:"tag"`
 		Category     string              `json:"category"`
