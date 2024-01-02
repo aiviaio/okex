@@ -216,11 +216,23 @@ const (
 	OrderMarket          = OrderType("market")
 	OrderLimit           = OrderType("limit")
 	OrderPostOnly        = OrderType("post_only")
+	// OrderFOK is Fill-or-kill order
 	OrderFOK             = OrderType("fok")
+	// OrderIOC is Immediate-or-cancel order
 	OrderIOC             = OrderType("ioc")
+	// OrderOptimalLimitIoc is Market order with immediate-or-cancel order
 	OrderOptimalLimitIoc = OrderType("optimal_limit_ioc")
+	// OrderMMP is Market Maker Protection (only applicable to Option in Portfolio Margin mode)
+	OrderMMP = OrderType("mmp")
+	// OrderMMPPostOnly is Market Maker Protection and Post-only order
+	// (only applicable to Option in Portfolio Margin mode)
+	OrderMMPPostOnly = OrderType("mmp_and_post_only")
+	// OrderOPFOK is Simple options (fok)
+	OrderOPFOK = OrderType("op_fok")
 
+	// AlgoOrderConditional is One-way stop order
 	AlgoOrderConditional = AlgoOrderType("conditional")
+	// AlgoOrderOCO is One-cancels-the-other order
 	AlgoOrderOCO         = AlgoOrderType("oco")
 	AlgoOrderTrigger     = AlgoOrderType("trigger")
 	AlgoOrderIceberg     = AlgoOrderType("iceberg")
@@ -244,6 +256,8 @@ const (
 	OrderPartiallyFilled = OrderState("partially_filled")
 	OrderFilled          = OrderState("filled")
 	OrderUnfilled        = OrderState("unfilled")
+	OrderEffective       = OrderState("effective")
+	OrderFailed          = OrderState("order_failed")
 
 	TransferWithinAccount     = TransferType(0)
 	MasterAccountToSubAccount = TransferType(1)
