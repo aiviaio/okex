@@ -396,7 +396,7 @@ func (t *BillType) UnmarshalJSON(s []byte) (err error) {
 		return
 	}
 
-	q, err := strconv.ParseUint(r, 10, 8)
+	q, err := strconv.ParseUint(r, 10, 16)
 	if err != nil {
 		return err
 	}
@@ -409,7 +409,7 @@ func (t *BillSubType) UnmarshalJSON(s []byte) (err error) {
 		return
 	}
 
-	q, err := strconv.ParseUint(r, 10, 8)
+	q, err := strconv.ParseUint(r, 10, 16)
 	if err != nil {
 		return err
 	}
@@ -422,7 +422,7 @@ func (t *FeeCategory) UnmarshalJSON(s []byte) (err error) {
 		return
 	}
 
-	q, err := strconv.ParseUint(r, 10, 8)
+	q, err := strconv.ParseUint(r, 10, 16)
 	if err != nil {
 		return err
 	}
@@ -435,7 +435,7 @@ func (t *AccountType) UnmarshalJSON(s []byte) (err error) {
 		return
 	}
 
-	q, err := strconv.ParseUint(r, 10, 8)
+	q, err := strconv.ParseUint(r, 10, 16)
 	if err != nil {
 		return err
 	}
@@ -448,7 +448,7 @@ func (t *DepositState) UnmarshalJSON(s []byte) (err error) {
 		return
 	}
 
-	q, err := strconv.ParseUint(r, 10, 8)
+	q, err := strconv.ParseUint(r, 10, 16)
 	if err != nil {
 		return err
 	}
