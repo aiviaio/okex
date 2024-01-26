@@ -41,16 +41,16 @@ type (
 	CandleStickWsBarSize string
 
 	Destination           int
-	BillType              uint8
-	BillSubType           uint8
-	FeeCategory           uint8
-	TransferType          uint8
-	AccountType           uint8
-	DepositState          uint8
-	WithdrawalDestination uint8
+	BillType              uint16
+	BillSubType           uint16
+	FeeCategory           uint16
+	TransferType          uint16
+	AccountType           uint16
+	DepositState          uint16
+	WithdrawalDestination uint16
 	WithdrawalState       int8
 
-	ConvertType uint8
+	ConvertType uint16
 
 	JSONFloat64 float64
 	JSONInt64   int64
@@ -158,6 +158,7 @@ const (
 	BillManuallyTransferInSubType               = BillSubType(201)
 	BillSystemTransferOutSubType                = BillSubType(202)
 	BillManuallyTransferOutSubType              = BillSubType(203)
+	BillCryptoDustAutoTransferOutSubType        = BillSubType(290)
 
 	PositionLongShortMode = PositionType("long_short_mode")
 	PositionNetMode       = PositionType("net_mode")
@@ -213,13 +214,13 @@ const (
 	AmendOrderOperation       = Operation("amend-order")
 	BatchAmendOrderOperation  = Operation("batch-amend-orders")
 
-	OrderMarket          = OrderType("market")
-	OrderLimit           = OrderType("limit")
-	OrderPostOnly        = OrderType("post_only")
+	OrderMarket   = OrderType("market")
+	OrderLimit    = OrderType("limit")
+	OrderPostOnly = OrderType("post_only")
 	// OrderFOK is Fill-or-kill order
-	OrderFOK             = OrderType("fok")
+	OrderFOK = OrderType("fok")
 	// OrderIOC is Immediate-or-cancel order
-	OrderIOC             = OrderType("ioc")
+	OrderIOC = OrderType("ioc")
 	// OrderOptimalLimitIoc is Market order with immediate-or-cancel order
 	OrderOptimalLimitIoc = OrderType("optimal_limit_ioc")
 	// OrderMMP is Market Maker Protection (only applicable to Option in Portfolio Margin mode)
@@ -233,11 +234,11 @@ const (
 	// AlgoOrderConditional is One-way stop order
 	AlgoOrderConditional = AlgoOrderType("conditional")
 	// AlgoOrderOCO is One-cancels-the-other order
-	AlgoOrderOCO         = AlgoOrderType("oco")
-	AlgoOrderTrigger     = AlgoOrderType("trigger")
-	AlgoOrderIceberg     = AlgoOrderType("iceberg")
-	AlgoOrderTwap        = AlgoOrderType("twap")
-	AlgoOrderTrailing    = AlgoOrderType("move_order_stop")
+	AlgoOrderOCO      = AlgoOrderType("oco")
+	AlgoOrderTrigger  = AlgoOrderType("trigger")
+	AlgoOrderIceberg  = AlgoOrderType("iceberg")
+	AlgoOrderTwap     = AlgoOrderType("twap")
+	AlgoOrderTrailing = AlgoOrderType("move_order_stop")
 
 	QuantityBaseCcy  = QuantityType("base_ccy")
 	QuantityQuoteCcy = QuantityType("quote_ccy")
@@ -399,7 +400,7 @@ func (t *BillType) UnmarshalJSON(s []byte) (err error) {
 	if err != nil {
 		return err
 	}
-	*(*uint8)(t) = uint8(q)
+	*(*uint16)(t) = uint16(q)
 	return
 }
 func (t *BillSubType) UnmarshalJSON(s []byte) (err error) {
@@ -412,7 +413,7 @@ func (t *BillSubType) UnmarshalJSON(s []byte) (err error) {
 	if err != nil {
 		return err
 	}
-	*(*uint8)(t) = uint8(q)
+	*(*uint16)(t) = uint16(q)
 	return
 }
 func (t *FeeCategory) UnmarshalJSON(s []byte) (err error) {
@@ -425,7 +426,7 @@ func (t *FeeCategory) UnmarshalJSON(s []byte) (err error) {
 	if err != nil {
 		return err
 	}
-	*(*uint8)(t) = uint8(q)
+	*(*uint16)(t) = uint16(q)
 	return
 }
 func (t *AccountType) UnmarshalJSON(s []byte) (err error) {
@@ -438,7 +439,7 @@ func (t *AccountType) UnmarshalJSON(s []byte) (err error) {
 	if err != nil {
 		return err
 	}
-	*(*uint8)(t) = uint8(q)
+	*(*uint16)(t) = uint16(q)
 	return
 }
 func (t *DepositState) UnmarshalJSON(s []byte) (err error) {
@@ -451,7 +452,7 @@ func (t *DepositState) UnmarshalJSON(s []byte) (err error) {
 	if err != nil {
 		return err
 	}
-	*(*uint8)(t) = uint8(q)
+	*(*uint16)(t) = uint16(q)
 	return
 }
 
