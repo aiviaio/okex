@@ -46,8 +46,8 @@ type ClientWs struct {
 const (
 	redialTick = 2 * time.Second
 	writeWait  = 3 * time.Second
-	pongWait   = 30 * time.Second
-	PingPeriod = (pongWait * 8) / 10
+	pongWait   = 25 * time.Second
+	PingPeriod = 15 * time.Second
 )
 
 // NewClient returns a pointer to a fresh ClientWs
@@ -256,24 +256,30 @@ func (c *ClientWs) dial(p bool) error {
 	defer res.Body.Close()
 
 	go func() {
-		err := c.receiver(p)
-		if err != nil {
-			fmt.Printf("receiver error: %v\n", err)
+		defer func() {
+			// Cleaning the connection with ws
 			c.Cancel()
 			c.mu[p].Lock()
 			c.conn[p].Close()
 			c.mu[p].Unlock()
+		}()
+		err := c.receiver(p)
+		if err != nil {
+			fmt.Printf("receiver error: %v\n", err)
 		}
 	}()
 
 	go func() {
-		err := c.sender(p)
-		if err != nil {
-			fmt.Printf("sender error: %v\n", err)
+		defer func() {
+			// Cleaning the connection with ws
 			c.Cancel()
 			c.mu[p].Lock()
 			c.conn[p].Close()
 			c.mu[p].Unlock()
+		}()
+		err := c.sender(p)
+		if err != nil {
+			fmt.Printf("sender error: %v\n", err)
 		}
 	}()
 
@@ -298,26 +304,24 @@ func (c *ClientWs) sender(p bool) error {
 			err := c.conn[p].SetWriteDeadline(time.Now().Add(writeWait))
 			if err != nil {
 				c.mu[p].RUnlock()
-				return err
+				return fmt.Errorf("failed to set write deadline for ws connection, error: %w", err)
 			}
 
 			w, err := c.conn[p].NextWriter(websocket.TextMessage)
 			if err != nil {
 				c.mu[p].RUnlock()
-				return err
+				return fmt.Errorf("failed to get next writer for ws connection, error: %w", err)
 			}
 
 			if _, err = w.Write(data); err != nil {
 				c.mu[p].RUnlock()
-				return err
+				return fmt.Errorf("failed to write data via ws connection, error: %w", err)
 			}
 
-			now := time.Now()
-			c.lastTransmit[p] = &now
 			c.mu[p].RUnlock()
 
 			if err := w.Close(); err != nil {
-				return err
+				return fmt.Errorf("failed to close ws connection, error: %w", err)
 			}
 		case <-ticker.C:
 			c.mu[p].RLock()
@@ -343,13 +347,13 @@ func (c *ClientWs) receiver(p bool) error {
 			err := c.conn[p].SetReadDeadline(time.Now().Add(pongWait))
 			if err != nil {
 				c.mu[p].RUnlock()
-				return err
+				return fmt.Errorf("failed to set read deadline for ws connection, error: %w", err)
 			}
 
 			mt, data, err := c.conn[p].ReadMessage()
 			if err != nil {
 				c.mu[p].RUnlock()
-				return err
+				return fmt.Errorf("failed to read message from ws connection, error: %w", err)
 			}
 			c.mu[p].RUnlock()
 
@@ -361,7 +365,7 @@ func (c *ClientWs) receiver(p bool) error {
 			if mt == websocket.TextMessage && string(data) != "pong" {
 				e := &events.Basic{}
 				if err := json.Unmarshal(data, e); err != nil {
-					return err
+					return fmt.Errorf("failed to unmarshall message from ws, error: %w", err)
 				}
 				go c.process(data, e)
 			}
