@@ -266,7 +266,8 @@ func (c *ClientWs) dial(p bool) error {
 		}()
 		err := c.receiver(p)
 		if err != nil {
-			if strings.Contains(err.Error(), "close 1006 (abnormal closure): unexpected EOF") {
+			if strings.Contains(err.Error(), "close 1006 (abnormal closure): unexpected EOF") ||
+				strings.Contains(err.Error(), "i/o timeout") {
 				c.ErrChan <- &events.Error{
 					Event: "error",
 					Msg:   err.Error(),
@@ -287,7 +288,8 @@ func (c *ClientWs) dial(p bool) error {
 		}()
 		err := c.sender(p)
 		if err != nil {
-			if strings.Contains(err.Error(), "close 1006 (abnormal closure): unexpected EOF") {
+			if strings.Contains(err.Error(), "close 1006 (abnormal closure): unexpected EOF") ||
+				strings.Contains(err.Error(), "i/o timeout") {
 				c.ErrChan <- &events.Error{
 					Event: "error",
 					Msg:   err.Error(),
