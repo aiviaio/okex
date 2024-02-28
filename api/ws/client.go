@@ -104,6 +104,14 @@ func (c *ClientWs) Connect(p bool) error {
 	}
 }
 
+// CheckConnect into the server
+func (c *ClientWs) CheckConnect(p bool) bool {
+	if c.conn[p] != nil {
+		return true
+	}
+	return false
+}
+
 // Login
 //
 // https://www.okex.com/docs-v5/en/#websocket-api-login
