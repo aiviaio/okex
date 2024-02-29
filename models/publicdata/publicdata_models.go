@@ -6,27 +6,35 @@ import (
 
 type (
 	Instrument struct {
-		InstID    string               `json:"instId"`
-		Uly       string               `json:"uly,omitempty"`
-		BaseCcy   string               `json:"baseCcy,omitempty"`
-		QuoteCcy  string               `json:"quoteCcy,omitempty"`
-		SettleCcy string               `json:"settleCcy,omitempty"`
-		CtValCcy  string               `json:"ctValCcy,omitempty"`
-		CtVal     okex.JSONFloat64     `json:"ctVal,omitempty"`
-		CtMult    okex.JSONFloat64     `json:"ctMult,omitempty"`
-		Stk       okex.JSONFloat64     `json:"stk,omitempty"`
-		TickSz    okex.JSONFloat64     `json:"tickSz,omitempty"`
-		LotSz     okex.JSONFloat64     `json:"lotSz,omitempty"`
-		MinSz     okex.JSONFloat64     `json:"minSz,omitempty"`
-		Lever     okex.JSONFloat64     `json:"lever"`
-		InstType  okex.InstrumentType  `json:"instType"`
-		Category  okex.FeeCategory     `json:"category,string"`
-		OptType   okex.OptionType      `json:"optType,omitempty"`
-		ListTime  okex.JSONTime        `json:"listTime"`
-		ExpTime   okex.JSONTime        `json:"expTime,omitempty"`
-		CtType    okex.ContractType    `json:"ctType,omitempty"`
-		Alias     okex.AliasType       `json:"alias,omitempty"`
-		State     okex.InstrumentState `json:"state"`
+		InstType     string               `json:"instType"`
+		InstID       string               `json:"instId"`
+		Uly          string               `json:"uly,omitempty"`
+		InstFamily   string               `json:"instFamily,omitempty"`
+		BaseCcy      string               `json:"baseCcy,omitempty"`
+		QuoteCcy     string               `json:"quoteCcy,omitempty"`
+		SettleCcy    string               `json:"settleCcy,omitempty"`
+		CtVal        okex.JSONFloat64     `json:"ctVal,omitempty"`
+		CtMult       okex.JSONFloat64     `json:"ctMult,omitempty"`
+		CtValCcy     string               `json:"ctValCcy,omitempty"`
+		OptType      okex.OptionType      `json:"optType,omitempty"`
+		Stk          okex.JSONFloat64     `json:"stk,omitempty"`
+		ListTime     okex.JSONTime        `json:"listTime"`
+		ExpTime      okex.JSONTime        `json:"expTime,omitempty"`
+		Lever        okex.JSONFloat64     `json:"lever,omitempty"`
+		TickSz       okex.JSONFloat64     `json:"tickSz,omitempty"`
+		LotSz        okex.JSONFloat64     `json:"lotSz,omitempty"`
+		MinSz        okex.JSONFloat64     `json:"minSz,omitempty"`
+		CtType       okex.ContractType    `json:"ctType,omitempty"`
+		Alias        okex.AliasType       `json:"alias,omitempty"`
+		State        okex.InstrumentState `json:"state"`
+		MaxLmtSz     okex.JSONFloat64     `json:"maxLmtSz"`
+		MaxMktSz     okex.JSONFloat64     `json:"maxMktSz"`
+		MaxLmtAmt    okex.JSONFloat64     `json:"maxLmtAmt"`
+		MaxMktAmt    okex.JSONFloat64     `json:"maxMktAmt"`
+		MaxTwapSz    okex.JSONFloat64     `json:"maxTwapSz"`
+		MaxIcebergSz okex.JSONFloat64     `json:"maxIcebergSz"`
+		MaxTriggerSz okex.JSONFloat64     `json:"maxTriggerSz"`
+		MaxStopSz    okex.JSONFloat64     `json:"maxStopSz"`
 	}
 	DeliveryExerciseHistory struct {
 		Details []*DeliveryExerciseHistoryDetails `json:"details"`
