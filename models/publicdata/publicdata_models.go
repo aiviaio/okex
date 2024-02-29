@@ -26,15 +26,15 @@ type (
 		MinSz        okex.JSONFloat64     `json:"minSz,omitempty"`
 		CtType       okex.ContractType    `json:"ctType,omitempty"`
 		Alias        okex.AliasType       `json:"alias,omitempty"`
-		State        okex.InstrumentState `json:"state"`
-		MaxLmtSz     okex.JSONFloat64     `json:"maxLmtSz"`
-		MaxMktSz     okex.JSONFloat64     `json:"maxMktSz"`
-		MaxLmtAmt    okex.JSONFloat64     `json:"maxLmtAmt"`
-		MaxMktAmt    okex.JSONFloat64     `json:"maxMktAmt"`
-		MaxTwapSz    okex.JSONFloat64     `json:"maxTwapSz"`
-		MaxIcebergSz okex.JSONFloat64     `json:"maxIcebergSz"`
-		MaxTriggerSz okex.JSONFloat64     `json:"maxTriggerSz"`
-		MaxStopSz    okex.JSONFloat64     `json:"maxStopSz"`
+		State        okex.InstrumentState `json:"state,omitempty"`
+		MaxLmtSz     okex.JSONFloat64     `json:"maxLmtSz,omitempty"`
+		MaxMktSz     okex.JSONFloat64     `json:"maxMktSz,omitempty"`
+		MaxLmtAmt    okex.JSONFloat64     `json:"maxLmtAmt,omitempty"`
+		MaxMktAmt    okex.JSONFloat64     `json:"maxMktAmt,omitempty"`
+		MaxTwapSz    okex.JSONFloat64     `json:"maxTwapSz,omitempty"`
+		MaxIcebergSz okex.JSONFloat64     `json:"maxIcebergSz,omitempty"`
+		MaxTriggerSz okex.JSONFloat64     `json:"maxTriggerSz,omitempty"`
+		MaxStopSz    okex.JSONFloat64     `json:"maxStopSz,omitempty"`
 	}
 	DeliveryExerciseHistory struct {
 		Details []*DeliveryExerciseHistoryDetails `json:"details"`
