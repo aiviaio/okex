@@ -274,12 +274,10 @@ func (c *ClientWs) dial(p bool) error {
 		}()
 		err := c.receiver(p)
 		if err != nil {
-			if strings.Contains(err.Error(), "close 1006 (abnormal closure): unexpected EOF") ||
-				strings.Contains(err.Error(), "i/o timeout") {
+			if !strings.Contains(err.Error(), "receiver error: operation cancelled: receiver") {
 				c.ErrChan <- &events.Error{
 					Event: "error",
 					Msg:   err.Error(),
-					Code:  1006,
 				}
 			}
 			fmt.Printf("receiver error: %v\n", err)
@@ -296,12 +294,10 @@ func (c *ClientWs) dial(p bool) error {
 		}()
 		err := c.sender(p)
 		if err != nil {
-			if strings.Contains(err.Error(), "close 1006 (abnormal closure): unexpected EOF") ||
-				strings.Contains(err.Error(), "i/o timeout") {
+			if !strings.Contains(err.Error(), "sender error: operation cancelled: sender") {
 				c.ErrChan <- &events.Error{
 					Event: "error",
 					Msg:   err.Error(),
-					Code:  1006,
 				}
 			}
 			fmt.Printf("sender error: %v\n", err)
