@@ -274,7 +274,7 @@ func (c *ClientWs) dial(p bool) error {
 		}()
 		err := c.receiver(p)
 		if err != nil {
-			if !strings.Contains(err.Error(), "receiver error: operation cancelled: receiver") {
+			if !strings.Contains(err.Error(), "operation cancelled: receiver") {
 				c.ErrChan <- &events.Error{
 					Event: "error",
 					Msg:   err.Error(),
@@ -294,7 +294,7 @@ func (c *ClientWs) dial(p bool) error {
 		}()
 		err := c.sender(p)
 		if err != nil {
-			if !strings.Contains(err.Error(), "sender error: operation cancelled: sender") {
+			if !strings.Contains(err.Error(), "operation cancelled: sender") {
 				c.ErrChan <- &events.Error{
 					Event: "error",
 					Msg:   err.Error(),
