@@ -21,6 +21,7 @@ type (
 		UsedWdQuota       string `json:"usedWdQuota"`
 		DepQuotaFixed     string `json:"depQuotaFixed"`
 		UsedDepQuotaFixed string `json:"usedDepQuotaFixed"`
+		NeedTag           bool   `json:"needTag"`
 	}
 
 	Balance struct {
