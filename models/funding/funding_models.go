@@ -17,6 +17,7 @@ type (
 		CanWd             bool   `json:"canWd"`
 		CanInternal       bool   `json:"canInternal"`
 		WdQuota           string `json:"wdQuota"`
+		WdTickSz          string `json:"wdTickSz"`
 		UsedWdQuota       string `json:"usedWdQuota"`
 		DepQuotaFixed     string `json:"depQuotaFixed"`
 		UsedDepQuotaFixed string `json:"usedDepQuotaFixed"`
