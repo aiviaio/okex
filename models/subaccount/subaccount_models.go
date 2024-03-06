@@ -140,6 +140,7 @@ type (
 		Tag      string `json:"tag,omitempty"`
 		Memo     string `json:"memo,omitempty"`
 		PmtID    string `json:"pmtId,omitempty"`
+		Comment  string `json:"comment,omitempty"`
 		Ccy      string `json:"ccy,omitempty"`
 		Chain    string `json:"chain,omitempty"`
 		TO       string `json:"to,omitempty"` // 6:Funding, 18:Trading account, Default is 6
