@@ -87,10 +87,11 @@ func (c *ClientWs) Connect(p bool) error {
 	if err == nil {
 		return nil
 	}
+	fmt.Printf("failed to dial ws connection, error: %v", err)
 
 	ticker := time.NewTicker(redialTick)
 	defer ticker.Stop()
-
+	counter := 0
 	for {
 		select {
 		case <-ticker.C:
@@ -98,6 +99,8 @@ func (c *ClientWs) Connect(p bool) error {
 			if err == nil {
 				return nil
 			}
+			counter++
+			fmt.Printf("failed %v attempt to dial ws connection, error: %v", counter, err)
 		case <-c.ctx.Done():
 			return c.handleCancel("connect")
 		}
@@ -263,6 +266,12 @@ func (c *ClientWs) dial(p bool) error {
 		return fmt.Errorf("error %d: %w", statusCode, err)
 	}
 	defer res.Body.Close()
+	var connResp map[string]interface{}
+	err = json.NewDecoder(res.Body).Decode(&connResp)
+	if err != nil {
+		fmt.Printf("failed to decode connect response, error: %v", err)
+	}
+	fmt.Printf("Connection response - errCode: %v, errMsg: %v, connID: %v", connResp["code"], connResp["msg"], connResp["connId"])
 
 	go func() {
 		defer func() {
