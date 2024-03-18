@@ -407,7 +407,9 @@ func (c *ClientWs) sign(method, path string) (string, string) {
 
 func (c *ClientWs) handleCancel(msg string) error {
 	go func() {
+		fmt.Println("Before ws done ch income msg: ", msg)
 		c.DoneChan <- msg
+		fmt.Println("After ws done ch income msg: ", msg)
 	}()
 
 	return fmt.Errorf("operation cancelled: %s", msg)
