@@ -14,6 +14,7 @@ import (
 	"github.com/aiviaio/okex"
 	requests "github.com/aiviaio/okex/requests/rest/public"
 	responses "github.com/aiviaio/okex/responses/public_data"
+	"github.com/go-logr/logr"
 )
 
 // ClientRest is the rest api client
@@ -31,10 +32,13 @@ type ClientRest struct {
 	destination okex.Destination
 	baseURL     okex.BaseURL
 	Client      *http.Client
+	log         logr.Logger
 }
 
+type ClientOption func(c *ClientRest)
+
 // NewClient returns a pointer to a fresh ClientRest
-func NewClient(apiKey, secretKey, passphrase string, baseURL okex.BaseURL, destination okex.Destination) *ClientRest {
+func NewClient(apiKey, secretKey, passphrase string, baseURL okex.BaseURL, destination okex.Destination, opts ...ClientOption) *ClientRest {
 	c := &ClientRest{
 		apiKey:      apiKey,
 		secretKey:   []byte(secretKey),
@@ -42,6 +46,7 @@ func NewClient(apiKey, secretKey, passphrase string, baseURL okex.BaseURL, desti
 		baseURL:     baseURL,
 		destination: destination,
 		Client:      http.DefaultClient,
+		log:         logr.New(nil),
 	}
 	c.Account = NewAccount(c)
 	c.SubAccount = NewSubAccount(c)
@@ -50,6 +55,10 @@ func NewClient(apiKey, secretKey, passphrase string, baseURL okex.BaseURL, desti
 	c.Market = NewMarket(c)
 	c.PublicData = NewPublicData(c)
 	c.TradeData = NewTradeData(c)
+
+	for _, o := range opts {
+		o(c)
+	}
 	return c
 }
 
@@ -176,4 +185,11 @@ func (c *ClientRest) sign(method, path, body string) (string, string) {
 	h := hmac.New(sha256.New, c.secretKey)
 	h.Write(p)
 	return ts, base64.StdEncoding.EncodeToString(h.Sum(nil))
+}
+
+// WithLogger option sets new logger for websocket client
+func WithLogger(sink logr.LogSink) ClientOption {
+	return func(c *ClientRest) {
+		c.log = c.log.WithSink(sink)
+	}
 }

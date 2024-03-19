@@ -12,9 +12,18 @@ import (
 	"sync"
 	"time"
 
+	"github.com/go-logr/logr"
+	"github.com/gorilla/websocket"
+
 	"github.com/aiviaio/okex"
 	"github.com/aiviaio/okex/events"
-	"github.com/gorilla/websocket"
+)
+
+const (
+	redialTick = 2 * time.Second
+	writeWait  = 3 * time.Second
+	pongWait   = 25 * time.Second
+	PingPeriod = 15 * time.Second
 )
 
 // ClientWs is the websocket api client
@@ -42,17 +51,13 @@ type ClientWs struct {
 	Private       *Private
 	Public        *Public
 	Trade         *Trade
+	log           logr.Logger
 }
 
-const (
-	redialTick = 2 * time.Second
-	writeWait  = 3 * time.Second
-	pongWait   = 25 * time.Second
-	PingPeriod = 15 * time.Second
-)
+type ClientOption func(c *ClientWs)
 
 // NewClient returns a pointer to a fresh ClientWs
-func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url map[bool]okex.BaseURL) *ClientWs {
+func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url map[bool]okex.BaseURL, opts ...ClientOption) *ClientWs {
 	ctx, cancel := context.WithCancel(ctx)
 	c := &ClientWs{
 		url:          url,
@@ -66,12 +71,16 @@ func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url ma
 		sendChan:     map[bool]chan []byte{true: make(chan []byte, 3), false: make(chan []byte, 3)},
 		DoneChan:     make(chan interface{}, 32),
 		lastTransmit: make(map[bool]*time.Time),
+		log:          logr.New(nil),
 	}
 
 	c.Private = NewPrivate(c)
 	c.Public = NewPublic(c)
 	c.Trade = NewTrade(c)
 
+	for _, o := range opts {
+		o(c)
+	}
 	return c
 }
 
@@ -87,7 +96,7 @@ func (c *ClientWs) Connect(p bool) error {
 	if err == nil {
 		return nil
 	}
-	fmt.Printf("failed to dial ws connection, error: %v", err)
+	c.log.Error(err, "failed to dial ws connection")
 
 	ticker := time.NewTicker(redialTick)
 	defer ticker.Stop()
@@ -100,7 +109,7 @@ func (c *ClientWs) Connect(p bool) error {
 				return nil
 			}
 			counter++
-			fmt.Printf("failed %v attempt to dial ws connection, error: %v", counter, err)
+			c.log.Error(err, "failed to dial ws connection", "attempt", counter)
 		case <-c.ctx.Done():
 			return c.handleCancel("connect")
 		}
@@ -266,12 +275,7 @@ func (c *ClientWs) dial(p bool) error {
 		return fmt.Errorf("error %d: %w", statusCode, err)
 	}
 	defer res.Body.Close()
-	var connResp map[string]interface{}
-	err = json.NewDecoder(res.Body).Decode(&connResp)
-	if err != nil {
-		fmt.Printf("failed to decode connect response, error: %v", err)
-	}
-	fmt.Printf("Connection response - errCode: %v, errMsg: %v, connID: %v", connResp["code"], connResp["msg"], connResp["connId"])
+	c.log.Info("response ws", "status", res.Status)
 
 	go func() {
 		defer func() {
@@ -289,7 +293,7 @@ func (c *ClientWs) dial(p bool) error {
 					Msg:   err.Error(),
 				}
 			}
-			fmt.Printf("receiver error: %v\n", err)
+			c.log.Error(err, "receiver error")
 		}
 	}()
 
@@ -309,7 +313,7 @@ func (c *ClientWs) dial(p bool) error {
 					Msg:   err.Error(),
 				}
 			}
-			fmt.Printf("sender error: %v\n", err)
+			c.log.Error(err, "sender error")
 		}
 	}()
 
@@ -367,6 +371,7 @@ func (c *ClientWs) sender(p bool) error {
 		}
 	}
 }
+
 func (c *ClientWs) receiver(p bool) error {
 	for {
 		select {
@@ -416,9 +421,7 @@ func (c *ClientWs) sign(method, path string) (string, string) {
 
 func (c *ClientWs) handleCancel(msg string) error {
 	go func() {
-		fmt.Println("Before ws done ch income msg: ", msg)
 		c.DoneChan <- msg
-		fmt.Println("After ws done ch income msg: ", msg)
 	}()
 
 	return fmt.Errorf("operation cancelled: %s", msg)
@@ -502,4 +505,11 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 	}
 
 	return false
+}
+
+// WithLogger option sets new logger for websocket client
+func WithLogger(sink logr.LogSink) ClientOption {
+	return func(c *ClientWs) {
+		c.log = c.log.WithSink(sink)
+	}
 }
