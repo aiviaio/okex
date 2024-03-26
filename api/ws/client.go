@@ -325,6 +325,10 @@ func (c *ClientWs) dial(p bool) error {
 
 func (c *ClientWs) sender(p bool) error {
 	ticker := time.NewTicker(time.Millisecond * 300)
+	// signaling that sender is done
+	defer func() {
+		c.DoneChan <- struct{}{}
+	}()
 	defer ticker.Stop()
 
 	for {
@@ -367,43 +371,52 @@ func (c *ClientWs) sender(p bool) error {
 
 			c.mu[p].RUnlock()
 		case <-c.ctx.Done():
-			return c.handleCancel("sender")
+			// gracefully handling signal to close ws conncetion
+			err := c.conn[p].WriteMessage(websocket.CloseMessage, websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""))
+			if err != nil {
+				return fmt.Errorf("failed to write close message, error: %w", err)
+			}
+			return nil
 		}
 	}
 }
 
 func (c *ClientWs) receiver(p bool) error {
+	// signaling that receiver is done
+	defer func() {
+		c.DoneChan <- struct{}{}
+	}()
 	for {
-		select {
-		case <-c.ctx.Done():
-			return c.handleCancel("receiver")
-		default:
-			c.mu[p].RLock()
-			err := c.conn[p].SetReadDeadline(time.Now().Add(pongWait))
-			if err != nil {
-				c.mu[p].RUnlock()
-				return fmt.Errorf("failed to set read deadline for ws connection, error: %w", err)
-			}
-
-			mt, data, err := c.conn[p].ReadMessage()
-			if err != nil {
-				c.mu[p].RUnlock()
-				return fmt.Errorf("failed to read message from ws connection, error: %w", err)
-			}
+		c.mu[p].RLock()
+		err := c.conn[p].SetReadDeadline(time.Now().Add(pongWait))
+		if err != nil {
 			c.mu[p].RUnlock()
+			return fmt.Errorf("failed to set read deadline for ws connection, error: %w", err)
+		}
 
-			now := time.Now()
-			c.mu[p].Lock()
-			c.lastTransmit[p] = &now
-			c.mu[p].Unlock()
+		mt, data, err := c.conn[p].ReadMessage()
+		if err != nil {
+			c.mu[p].RUnlock()
+			return fmt.Errorf("failed to read message from ws connection, error: %w", err)
+		}
+		c.mu[p].RUnlock()
 
-			if mt == websocket.TextMessage && string(data) != "pong" {
-				e := &events.Basic{}
-				if err := json.Unmarshal(data, e); err != nil {
-					return fmt.Errorf("failed to unmarshall message from ws, error: %w", err)
-				}
-				go c.process(data, e)
+		now := time.Now()
+		c.mu[p].Lock()
+		c.lastTransmit[p] = &now
+		c.mu[p].Unlock()
+
+		// handling close message
+		if mt == websocket.CloseMessage {
+			c.log.Info("received close message")
+			return nil
+		}
+		if mt == websocket.TextMessage && string(data) != "pong" {
+			e := &events.Basic{}
+			if err := json.Unmarshal(data, e); err != nil {
+				return fmt.Errorf("failed to unmarshall message from ws, error: %w", err)
 			}
+			go c.process(data, e)
 		}
 	}
 }
