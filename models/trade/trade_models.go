@@ -149,5 +149,6 @@ type (
 		TgtCcy          okex.QuantityType   `json:"tgtCcy"`
 		CTime           okex.JSONTime       `json:"cTime"`
 		TriggerTime     okex.JSONTime       `json:"triggerTime"`
+		MoveTriggerPx   okex.JSONFloat64    `json:"moveTriggerPx"`
 	}
 )
