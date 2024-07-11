@@ -3,6 +3,9 @@ package funding
 import "github.com/aiviaio/okex"
 
 type (
+	GetCurrencies struct {
+		Ccy []string `json:"ccy,omitempty"`
+	}
 	GetBalance struct {
 		Ccy []string `json:"ccy,omitempty"`
 	}
