@@ -181,7 +181,14 @@ func (c *ClientWs) Subscribe(p bool, ch []okex.ChannelName, args map[string]stri
 //
 // https://www.okex.com/docs-v5/en/#websocket-api-unsubscribe
 func (c *ClientWs) Unsubscribe(p bool, ch []okex.ChannelName, args map[string]string) error {
-	tmpArgs := make([]map[string]string, len(ch))
+	count := 1
+	if len(ch) != 0 {
+		count = len(ch)
+	}
+
+	tmpArgs := make([]map[string]string, count)
+	tmpArgs[0] = args
+
 	for i, name := range ch {
 		tmpArgs[i] = make(map[string]string)
 		tmpArgs[i]["channel"] = string(name)
