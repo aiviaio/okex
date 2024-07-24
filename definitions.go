@@ -39,6 +39,7 @@ type (
 	InstrumentState      string
 	DeliveryExerciseType string
 	CandleStickWsBarSize string
+	OrderTypeUnitConvert string
 
 	Destination           int
 	BillType              uint16
@@ -334,6 +335,10 @@ const (
 
 	ConvertTypeContract = ConvertType(1)
 	ConvertTypeCurrency = ConvertType(2)
+	// OrderTypeUnitConvertClose round sz to the nearest when closing positions
+	OrderTypeUnitConvertClose = OrderTypeUnitConvert("close")
+	// OrderTypeUnitConvertOpen round down sz when opening positions
+	OrderTypeUnitConvertOpen = OrderTypeUnitConvert("open")
 )
 
 func (t JSONTime) String() string { return time.Time(t).String() }
