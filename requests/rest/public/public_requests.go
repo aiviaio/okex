@@ -75,5 +75,7 @@ type (
 		Sz     float64          `json:"sz,omitempty,string"`
 		Px     float64          `json:"px,omitempty,string"`
 		Unit   string           `json:"unit,omitempty"`
+		// The default is close
+		OpType string `json:"opType,omitempty"`
 	}
 )
