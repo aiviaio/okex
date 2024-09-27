@@ -26,16 +26,27 @@ const (
 	PingPeriod = 15 * time.Second
 )
 
+type BizType string
+
+const (
+	// PublicPath is the public websocket api path
+	BizPublic BizType = "public"
+	// PrivatePath is the private websocket api path
+	BizPrivate BizType = "private"
+	// BusinessPath is the business websocket api path
+	BizBusiness BizType = "business"
+)
+
 // ClientWs is the websocket api client
 //
 // https://www.okex.com/docs-v5/en/#websocket-api
 type ClientWs struct {
-	url           map[bool]okex.BaseURL
+	url           map[BizType]okex.BaseURL
 	apiKey        string
 	secretKey     []byte
 	passphrase    string
-	conn          map[bool]*websocket.Conn
-	mu            map[bool]*sync.RWMutex
+	conn          map[BizType]*websocket.Conn
+	mu            map[BizType]*sync.RWMutex
 	ctx           context.Context
 	Cancel        context.CancelFunc
 	DoneChan      chan interface{}
@@ -44,12 +55,13 @@ type ClientWs struct {
 	UnsubscribeCh chan *events.Unsubscribe
 	LoginChan     chan *events.Login
 	SuccessChan   chan *events.Success
-	sendChan      map[bool]chan []byte
-	lastTransmit  map[bool]*time.Time
+	sendChan      map[BizType]chan []byte
+	lastTransmit  map[BizType]*time.Time
 	AuthRequested *time.Time
 	Authorized    bool
 	Private       *Private
 	Public        *Public
+	Business      *Business
 	Trade         *Trade
 	log           logr.Logger
 }
@@ -57,25 +69,26 @@ type ClientWs struct {
 type ClientOption func(c *ClientWs)
 
 // NewClient returns a pointer to a fresh ClientWs
-func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url map[bool]okex.BaseURL, opts ...ClientOption) *ClientWs {
+func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url map[BizType]okex.BaseURL, opts ...ClientOption) *ClientWs {
 	ctx, cancel := context.WithCancel(ctx)
 	c := &ClientWs{
 		url:          url,
 		apiKey:       apiKey,
 		secretKey:    []byte(secretKey),
 		passphrase:   passphrase,
-		conn:         make(map[bool]*websocket.Conn),
-		mu:           map[bool]*sync.RWMutex{true: {}, false: {}},
+		conn:         make(map[BizType]*websocket.Conn),
+		mu:           map[BizType]*sync.RWMutex{BizPublic: {}, BizPrivate: {}, BizBusiness: {}},
 		ctx:          ctx,
 		Cancel:       cancel,
-		sendChan:     map[bool]chan []byte{true: make(chan []byte, 3), false: make(chan []byte, 3)},
+		sendChan:     map[BizType]chan []byte{BizPublic: make(chan []byte, 3), BizPrivate: make(chan []byte, 3), BizBusiness: make(chan []byte, 3)},
 		DoneChan:     make(chan interface{}, 32),
-		lastTransmit: make(map[bool]*time.Time),
+		lastTransmit: make(map[BizType]*time.Time),
 		log:          logr.New(nil),
 	}
 
 	c.Private = NewPrivate(c)
 	c.Public = NewPublic(c)
+	c.Business = NewBusiness(c)
 	c.Trade = NewTrade(c)
 
 	for _, o := range opts {
@@ -87,7 +100,7 @@ func NewClient(ctx context.Context, apiKey, secretKey, passphrase string, url ma
 // Connect into the server
 //
 // https://www.okex.com/docs-v5/en/#websocket-api-connect
-func (c *ClientWs) Connect(p bool) error {
+func (c *ClientWs) Connect(p BizType) error {
 	if c.conn[p] != nil {
 		return nil
 	}
@@ -117,7 +130,7 @@ func (c *ClientWs) Connect(p bool) error {
 }
 
 // CheckConnect into the server
-func (c *ClientWs) CheckConnect(p bool) bool {
+func (c *ClientWs) CheckConnect(p BizType) bool {
 	if c.conn[p] != nil {
 		return true
 	}
@@ -150,14 +163,14 @@ func (c *ClientWs) Login() error {
 		},
 	}
 
-	return c.Send(true, okex.LoginOperation, args)
+	return c.Send(BizPrivate, okex.LoginOperation, args)
 }
 
 // Subscribe
 // Users can choose to subscribe to one or more channels, and the total length of multiple channels cannot exceed 4096 bytes.
 //
 // https://www.okex.com/docs-v5/en/#websocket-api-subscribe
-func (c *ClientWs) Subscribe(p bool, ch []okex.ChannelName, args map[string]string) error {
+func (c *ClientWs) Subscribe(p BizType, ch []okex.ChannelName, args map[string]string) error {
 	count := 1
 	if len(ch) != 0 {
 		count = len(ch)
@@ -180,7 +193,7 @@ func (c *ClientWs) Subscribe(p bool, ch []okex.ChannelName, args map[string]stri
 // Unsubscribe into channel(s)
 //
 // https://www.okex.com/docs-v5/en/#websocket-api-unsubscribe
-func (c *ClientWs) Unsubscribe(p bool, ch []okex.ChannelName, args map[string]string) error {
+func (c *ClientWs) Unsubscribe(p BizType, ch []okex.ChannelName, args map[string]string) error {
 	tmpArgs := make([]map[string]string, len(ch))
 	for i, name := range ch {
 		tmpArgs[i] = make(map[string]string)
@@ -194,11 +207,11 @@ func (c *ClientWs) Unsubscribe(p bool, ch []okex.ChannelName, args map[string]st
 }
 
 // Send message through either connections
-func (c *ClientWs) Send(p bool, op okex.Operation, args []map[string]string, extras ...map[string]string) error {
+func (c *ClientWs) Send(p BizType, op okex.Operation, args []map[string]string, extras ...map[string]string) error {
 	if op != okex.LoginOperation {
 		err := c.Connect(p)
 		if err == nil {
-			if p {
+			if (p == BizPrivate || p == BizBusiness) && !c.Authorized {
 				err = c.WaitForAuthorization()
 				if err != nil {
 					return err
@@ -261,7 +274,7 @@ func (c *ClientWs) WaitForAuthorization() error {
 	return nil
 }
 
-func (c *ClientWs) dial(p bool) error {
+func (c *ClientWs) dial(p BizType) error {
 	c.mu[p].Lock()
 	conn, res, err := websocket.DefaultDialer.Dial(string(c.url[p]), nil)
 	if err != nil {
@@ -323,7 +336,7 @@ func (c *ClientWs) dial(p bool) error {
 	return nil
 }
 
-func (c *ClientWs) sender(p bool) error {
+func (c *ClientWs) sender(p BizType) error {
 	ticker := time.NewTicker(time.Millisecond * 300)
 	defer ticker.Stop()
 
@@ -372,7 +385,7 @@ func (c *ClientWs) sender(p bool) error {
 	}
 }
 
-func (c *ClientWs) receiver(p bool) error {
+func (c *ClientWs) receiver(p BizType) error {
 	for {
 		select {
 		case <-c.ctx.Done():
@@ -483,6 +496,10 @@ func (c *ClientWs) process(data []byte, e *events.Basic) bool {
 	}
 
 	if c.Public.Process(data, e) {
+		return true
+	}
+
+	if c.Business.Process(data, e) {
 		return true
 	}
 

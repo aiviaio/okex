@@ -34,7 +34,7 @@ func (c *Trade) PlaceOrder(req ...requests.PlaceOrder) error {
 	for i, order := range req {
 		tmpArgs[i] = okex.S2M(order)
 	}
-	return c.Send(true, op, tmpArgs, map[string]string{"id": req[0].ID})
+	return c.Send(BizPrivate, op, tmpArgs, map[string]string{"id": req[0].ID})
 }
 
 // CancelOrder
@@ -54,7 +54,7 @@ func (c *Trade) CancelOrder(req ...requests.CancelOrder) error {
 	for i, order := range req {
 		tmpArgs[i] = okex.S2M(order)
 	}
-	return c.Send(true, op, tmpArgs, map[string]string{"id": req[0].ID})
+	return c.Send(BizPrivate, op, tmpArgs, map[string]string{"id": req[0].ID})
 }
 
 // AmendOrder
@@ -74,5 +74,5 @@ func (c *Trade) AmendOrder(req ...requests.AmendOrder) error {
 	for i, order := range req {
 		tmpArgs[i] = okex.S2M(order)
 	}
-	return c.Send(true, op, tmpArgs, map[string]string{"id": req[0].ID})
+	return c.Send(BizPrivate, op, tmpArgs, map[string]string{"id": req[0].ID})
 }

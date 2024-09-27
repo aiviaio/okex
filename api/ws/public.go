@@ -46,7 +46,7 @@ func (c *Public) Instruments(req requests.Instruments, ch ...chan *public.Instru
 	if len(ch) > 0 {
 		c.iCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{"instruments"}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{"instruments"}, m)
 }
 
 // UInstruments
@@ -57,7 +57,7 @@ func (c *Public) UInstruments(req requests.Instruments, rCh ...bool) error {
 	if len(rCh) > 0 && rCh[0] {
 		c.iCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{"instruments"}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{"instruments"}, m)
 }
 
 // Tickers
@@ -69,7 +69,7 @@ func (c *Public) Tickers(req requests.Tickers, ch ...chan *public.Tickers) error
 	if len(ch) > 0 {
 		c.tCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{"tickers"}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{"tickers"}, m)
 }
 
 // UTickers
@@ -80,7 +80,7 @@ func (c *Public) UTickers(req requests.Tickers, rCh ...bool) error {
 	if len(rCh) > 0 && rCh[0] {
 		c.tCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{"tickers"}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{"tickers"}, m)
 }
 
 // OpenInterest
@@ -92,7 +92,7 @@ func (c *Public) OpenInterest(req requests.OpenInterest, ch ...chan *public.Open
 	if len(ch) > 0 {
 		c.oiCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{"open-interest"}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{"open-interest"}, m)
 }
 
 // UOpenInterest
@@ -103,30 +103,7 @@ func (c *Public) UOpenInterest(req requests.OpenInterest, rCh ...bool) error {
 	if len(rCh) > 0 && rCh[0] {
 		c.oiCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{"open-interest"}, m)
-}
-
-// Candlesticks
-// Retrieve the open interest. Data will by pushed every 3 seconds.
-//
-// https://www.okex.com/docs-v5/en/#websocket-api-public-channels-candlesticks-channel
-func (c *Public) Candlesticks(req requests.Candlesticks, ch ...chan *public.Candlesticks) error {
-	m := okex.S2M(req)
-	if len(ch) > 0 {
-		c.cCh = ch[0]
-	}
-	return c.Subscribe(false, []okex.ChannelName{}, m)
-}
-
-// UCandlesticks
-//
-// https://www.okex.com/docs-v5/en/#websocket-api-public-channels-candlesticks-channel
-func (c *Public) UCandlesticks(req requests.Candlesticks, rCh ...bool) error {
-	m := okex.S2M(req)
-	if len(rCh) > 0 && rCh[0] {
-		c.cCh = nil
-	}
-	return c.Unsubscribe(false, []okex.ChannelName{}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{"open-interest"}, m)
 }
 
 // Trades
@@ -138,7 +115,7 @@ func (c *Public) Trades(req requests.Trades, ch ...chan *public.Trades) error {
 	if len(ch) > 0 {
 		c.trCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{"trades"}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{"trades"}, m)
 }
 
 // UTrades
@@ -149,7 +126,7 @@ func (c *Public) UTrades(req requests.Trades, rCh ...bool) error {
 	if len(rCh) > 0 && rCh[0] {
 		c.trCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{"trades"}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{"trades"}, m)
 }
 
 // EstimatedDeliveryExercisePrice
@@ -163,7 +140,7 @@ func (c *Public) EstimatedDeliveryExercisePrice(req requests.EstimatedDeliveryEx
 	if len(ch) > 0 {
 		c.edepCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{"estimated-price"}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{"estimated-price"}, m)
 }
 
 // UEstimatedDeliveryExercisePrice
@@ -174,7 +151,7 @@ func (c *Public) UEstimatedDeliveryExercisePrice(req requests.EstimatedDeliveryE
 	if len(rCh) > 0 && rCh[0] {
 		c.edepCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{"estimated-price"}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{"estimated-price"}, m)
 }
 
 // MarkPrice
@@ -186,7 +163,7 @@ func (c *Public) MarkPrice(req requests.MarkPrice, ch ...chan *public.MarkPrice)
 	if len(ch) > 0 {
 		c.mpCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{"mark-price"}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{"mark-price"}, m)
 }
 
 // UMarkPrice
@@ -197,7 +174,7 @@ func (c *Public) UMarkPrice(req requests.MarkPrice, rCh ...bool) error {
 	if len(rCh) > 0 && rCh[0] {
 		c.mpCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{"mark-price"}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{"mark-price"}, m)
 }
 
 // MarkPriceCandlesticks
@@ -210,7 +187,7 @@ func (c *Public) MarkPriceCandlesticks(req requests.MarkPriceCandlesticks, ch ..
 	if len(ch) > 0 {
 		c.mpcCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{}, m)
 }
 
 // UMarkPriceCandlesticks
@@ -222,7 +199,7 @@ func (c *Public) UMarkPriceCandlesticks(req requests.MarkPriceCandlesticks, rCh 
 	if len(rCh) > 0 && rCh[0] {
 		c.mpcCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{}, m)
 }
 
 // PriceLimit
@@ -234,7 +211,7 @@ func (c *Public) PriceLimit(req requests.PriceLimit, ch ...chan *public.PriceLim
 	if len(ch) > 0 {
 		c.plCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{"price-limit"}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{"price-limit"}, m)
 }
 
 // UPriceLimit
@@ -245,7 +222,7 @@ func (c *Public) UPriceLimit(req requests.PriceLimit, rCh ...bool) error {
 	if len(rCh) > 0 && rCh[0] {
 		c.plCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{"price-limit"}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{"price-limit"}, m)
 }
 
 // OrderBook
@@ -259,7 +236,7 @@ func (c *Public) OrderBook(req requests.OrderBook, ch ...chan *public.OrderBook)
 	if len(ch) > 0 {
 		c.obCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{}, m)
 }
 
 // UOrderBook
@@ -270,7 +247,7 @@ func (c *Public) UOrderBook(req requests.OrderBook, rCh ...bool) error {
 	if len(rCh) > 0 && rCh[0] {
 		c.obCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{okex.ChannelName(req.Channel)}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{okex.ChannelName(req.Channel)}, m)
 }
 
 // OPTIONSummary
@@ -282,7 +259,7 @@ func (c *Public) OPTIONSummary(req requests.OPTIONSummary, ch ...chan *public.OP
 	if len(ch) > 0 {
 		c.osCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{"opt-summary"}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{"opt-summary"}, m)
 }
 
 // UOPTIONSummary
@@ -293,7 +270,7 @@ func (c *Public) UOPTIONSummary(req requests.OPTIONSummary, rCh ...bool) error {
 	if len(rCh) > 0 && rCh[0] {
 		c.osCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{"opt-summary"}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{"opt-summary"}, m)
 }
 
 // FundingRate
@@ -305,7 +282,7 @@ func (c *Public) FundingRate(req requests.FundingRate, ch ...chan *public.Fundin
 	if len(ch) > 0 {
 		c.frCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{"funding-rate"}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{"funding-rate"}, m)
 }
 
 // UFundingRate
@@ -316,7 +293,7 @@ func (c *Public) UFundingRate(req requests.FundingRate, rCh ...bool) error {
 	if len(rCh) > 0 && rCh[0] {
 		c.frCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{"funding-rate"}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{"funding-rate"}, m)
 }
 
 // IndexCandlesticks
@@ -329,7 +306,7 @@ func (c *Public) IndexCandlesticks(req requests.IndexCandlesticks, ch ...chan *p
 	if len(ch) > 0 {
 		c.icCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{}, m)
 }
 
 // UIndexCandlesticks
@@ -341,7 +318,7 @@ func (c *Public) UIndexCandlesticks(req requests.IndexCandlesticks, rCh ...bool)
 	if len(rCh) > 0 && rCh[0] {
 		c.icCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{}, m)
 }
 
 // IndexTickers
@@ -353,7 +330,7 @@ func (c *Public) IndexTickers(req requests.IndexTickers, ch ...chan *public.Inde
 	if len(ch) > 0 {
 		c.itCh = ch[0]
 	}
-	return c.Subscribe(false, []okex.ChannelName{"index-tickers"}, m)
+	return c.Subscribe(BizPublic, []okex.ChannelName{"index-tickers"}, m)
 }
 
 // UIndexTickers
@@ -364,7 +341,7 @@ func (c *Public) UIndexTickers(req requests.IndexTickers, rCh ...bool) error {
 	if len(rCh) > 0 && rCh[0] {
 		c.itCh = nil
 	}
-	return c.Unsubscribe(false, []okex.ChannelName{"index-tickers"}, m)
+	return c.Unsubscribe(BizPublic, []okex.ChannelName{"index-tickers"}, m)
 }
 
 func (c *Public) Process(data []byte, e *events.Basic) bool {
@@ -527,7 +504,7 @@ func (c *Public) Process(data []byte, e *events.Basic) bool {
 				return true
 			}
 			// candlestick channels
-			if strings.Contains(chName, "candle") {
+			/* if strings.Contains(chName, "candle") {
 				e := public.Candlesticks{}
 				err := json.Unmarshal(data, &e)
 				if err != nil {
@@ -539,7 +516,7 @@ func (c *Public) Process(data []byte, e *events.Basic) bool {
 					}
 				}()
 				return true
-			}
+			} */
 			// order book channels
 			if strings.Contains(chName, "books") {
 				e := public.OrderBook{}
